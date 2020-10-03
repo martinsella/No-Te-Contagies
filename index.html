@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>¡No Te Contagies!</title>
+    <link rel="icon" href="assets/images/icon.png" />
+
+    <!--LLamamos a phaser a través de un CDN (desde un server)-->
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.24.1/dist/phaser.min.js"></script>
+
+    <!--Declaramos la escena que contiene las configuraciones básicas/primarias de nuestro juego-->
+    <script type="module" src="js/scenes/game.js"></script>
+    <script>
+      //declaramos las variables que utilizará nuestro juego en las demás escenas y, si es necesario, seteamos valores (algunos valores serán seteados máds adelante).
+      var game;
+      var isMobile;
+      var lives = 3;
+      var score = 0;
+      var nivel = 1;
+      var nivsup = 0;
+      var menu;
+      var delay;
+      var percentage;
+      var timedEvent;
+      var timedEvent2;
+      var timedEvent3;
+      var player;
+      var b1;
+      var b2;
+      var b3;
+      var b4;
+      var b5;
+      var b6;
+      var b7;
+      var b8;
+      var cursors;
+      var up = false;
+      var down = false;
+      var left = false;
+      var right = false;
+      var upLeft = false;
+      var upRight = false;
+      var downLeft = false;
+      var downRight = false;
+      var type;
+      var bads;
+      var goods;
+      var goods2;
+      var colliders;
+      var pattern;
+      var hearts;
+      var progressBar;
+      var progressBox;
+      var vaccine;
+      var chinstraps;
+      var trees;
+      var font;
+      var countvac;
+      var iobject;
+      var upAnim = "up";
+      var downAnim = "down";
+      var rightAnim = "right";
+      var leftAnim = "left";
+      var stopAnim = "stop";
+      var velX;
+      var velY;
+      var velX2;
+      var velY2;
+      var vel2X;
+      var vel2X2;
+      var vel2Y;
+      var vel2Y2;
+      var x;
+      var x2;
+      var y;
+      var y2;
+      var i;
+      var track;
+      var bpause;
+      var button;
+      var button2;
+      var button3;
+      var button4;
+      var fsoap;
+      var fvaccine;
+      var falcohol;
+      var fchinstrap;
+      var fmud;
+      var fvirus;
+      var fcloud;
+    </script>
+  </head>
+  <style>
+    body {
+      background-color: rgb(88, 125, 145);
+    }
+  </style>
+  <body></body>
+</html>
