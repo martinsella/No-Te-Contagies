@@ -1,4 +1,5 @@
 import Player from "../classes/player.js";
+import Ball from "../classes/ball.js";
 
 //Definimos la clase (debe coincidir con el nombre de la escena, por ejemplo, scene1)
 class gameplay extends Phaser.Scene {
@@ -8,17 +9,31 @@ class gameplay extends Phaser.Scene {
   }
 
   create() {
-    //Creación del background.
+    //Creación de: background, personaje y pelota (si es necesario).
     if (nivel == 1) {
       this.add.image(400, 300, "background");
+      player = new Player({ scene: this, x: 400, y: 300, texture: "player" });
+      this.anims.create({
+        key: "playBall",
+        frames: this.anims.generateFrameNumbers("ball", {
+          start: 0,
+          end: 5,
+        }),
+        framerate: 10,
+        repeat: -1,
+      });
+      this.anims.create({
+        key: "stopBall",
+        frames: [{ key: "ball", frame: 2 }],
+        framerate: 10,
+        repeat: 0,
+      });
+      ball = new Ball({ scene: this, x: 280, y: 350, texture: "ball" })
+      this.physics.add.collider(player, ball, () => {
+        ball.anims.play("playBall", true);
+      }, null, this);
     } else if (nivel == 2) {
       this.add.image(400, 300, "background2");
-    }
-
-    //Creación del personaje por medio de una clase.
-    if (nivel == 1) {
-      player = new Player({ scene: this, x: 400, y: 300, texture: "player" });
-    } else if (nivel == 2) {
       player = new Player({ scene: this, x: 400, y: 150, texture: "player" });
     }
 
@@ -235,7 +250,14 @@ class gameplay extends Phaser.Scene {
             (downRight = false), (b8.alpha += 1);
           }));
     else {
-      cursors = this.input.keyboard.createCursorKeys();
+      cursors = this.input.keyboard.createCursorKeys(),
+      FKey = this.input.keyboard.addKey('F');
+      FKey.on('down', () => {
+        if (this.scale.isFullscreen) {
+        this.scale.stopFullscreen();
+      } else {
+        this.scale.startFullscreen();
+      }}, this);
     }
 
     this.physics.add.collider(colliders, bads, this.badsErrase, null, this); //collider que ejecuta la función "badsErrase" cuando un objeto malo choca con un collider (línea 312).
@@ -634,6 +656,7 @@ class gameplay extends Phaser.Scene {
   gameover() {
     this.physics.pause();
     player.anims.play(stopAnim);
+    ball.anims.play("stopBall", true);
     timedEvent.paused = true;
 
     if (nivel !== 1 && stopAnim == "stop2") {
@@ -664,6 +687,7 @@ class gameplay extends Phaser.Scene {
     this.physics.pause();
     timedEvent.paused = true;
     player.anims.play(stopAnim);
+    ball.anims.play("stopBall", true);
 
     if (nivel !== 1 && stopAnim == "stop2") {
       upAnim = "up";
@@ -734,7 +758,8 @@ class gameplay extends Phaser.Scene {
     timedEvent.paused = true;
     bpause.destroy();
     this.physics.pause();
-    player.anims.play(stop);
+    player.anims.play(stopAnim);
+    ball.anims.play("stopBall", true);
     menu = this.add.image(400, 300, "pause");
 
     button = this.add

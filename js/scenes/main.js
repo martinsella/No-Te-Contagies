@@ -35,6 +35,11 @@ class main extends Phaser.Scene {
       frameHeight: 491,
       frameWidth: 93,
     });
+    this.load.spritesheet("ball", "assets/images/objects/ball.png", {
+      //Indicamos el alto y ancho (en píxeles) de cada frame que compone el spritesheet.
+      frameHeight: 25,
+      frameWidth: 25,
+    });
     this.load.image("b1", "assets/images/buttons/b1.png");
     this.load.image("b2", "assets/images/buttons/b2.png");
     this.load.image("b3", "assets/images/buttons/b3.png");
@@ -62,8 +67,8 @@ class main extends Phaser.Scene {
     this.load.image("blevel2", "assets/images/buttons/blev2.png");
     this.load.image("blevel3", "assets/images/buttons/blev3.png");
     this.load.image("blocked", "assets/images/buttons/blocked.png");
-    this.load.image("bjvj", "assets/images/buttons/bjvj.png");
-    this.load.image("bjvjlocked", "assets/images/buttons/bjvjlocked.png");
+    this.load.image("bpvp", "assets/images/buttons/bpvp.png");
+    this.load.image("bpvplocked", "assets/images/buttons/bpvplocked.png");
     this.load.image("virus", "assets/images/objects/virus.png");
     this.load.image("cloud", "assets/images/objects/cloud.png");
     this.load.image("bretry", "assets/images/buttons/bretry.png");
@@ -93,7 +98,7 @@ class main extends Phaser.Scene {
     this.load.image("ivaccine", "assets/images/objects/ivaccine.png");
     this.load.image("ivirus", "assets/images/objects/ivirus.png");
     this.load.image("icloud", "assets/images/objects/icloud.png");
-    this.load.image("ijvj", "assets/images/objects/ijvj.png");
+    this.load.image("ipvp", "assets/images/objects/ipvp.png");
     this.load.audio("mainmusic", "assets/music/main.mp3");
     this.load.audio("goodiesfx", "assets/sfx/goodie.wav");
     this.load.audio("chinstrapfx", "assets/sfx/chinstrap.wav");
@@ -102,8 +107,8 @@ class main extends Phaser.Scene {
   //Menú principal. Creación del menú, botones que redigirán a las distintas escenas (menú de créditos, ayuda, jugar, etc).
   create() {
     if (track == undefined) {
-      track = this.sound.add("mainmusic", {loop: true});
-      track.play()
+      track = this.sound.add("mainmusic", { loop: true });
+      track.play();
     }
     this.add.image(400, 300, "menu");
     this.add
@@ -129,10 +134,20 @@ class main extends Phaser.Scene {
     this.add
       .image(90, 558, "bexit")
       .setInteractive()
-      .on(
-        "pointerdown",
-        () => {track.pause(); (window.location.href = "http://www.google.com")}
-      );
+      .on("pointerdown", () => {
+        track.pause();
+        window.location.href = "http://www.google.com";
+      });
+    this.add
+      .image(770, 30, "bpause")
+      .setInteractive()
+      .on("pointerdown", () => {
+        if (this.scale.isFullscreen) {
+          this.scale.stopFullscreen();
+        } else {
+          this.scale.startFullscreen();
+        }
+      });
   }
 }
 

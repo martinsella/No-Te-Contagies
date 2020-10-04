@@ -29,15 +29,15 @@ class selector extends Phaser.Scene {
       this.add.image(328, 284, "blocked");
       this.add.image(465, 284, "blocked");
       this.add
-        .image(603, 284, "bjvjlocked")
+        .image(603, 284, "bpvplocked")
         .setInteractive()
-        .on("pointerover", () => iobject = this.add.image(603, 284, "ijvj"));
+        .on("pointerover", () => iobject = this.add.image(603, 284, "ipvp"));
     } else if (nivsup == 1) {
       this.add.image(465, 284, "blocked");
       this.add
-        .image(603, 284, "bjvjlocked")
+        .image(603, 284, "bpvplocked")
         .setInteractive()
-        .on("pointerover", () => iobject = this.add.image(603, 284, "ijvj"));
+        .on("pointerover", () => iobject = this.add.image(603, 284, "ipvp"));
       this.add
         .image(328, 284, "blevel2")
         .setInteractive()
@@ -50,9 +50,9 @@ class selector extends Phaser.Scene {
         });
     } else if (nivsup == 2) {
       this.add
-        .image(603, 284, "bjvjlocked")
+        .image(603, 284, "bpvplocked")
         .setInteractive()
-        .on("pointerover", () => iobject = this.add.image(603, 284, "ijvj"));
+        .on("pointerover", () => iobject = this.add.image(603, 284, "ipvp"));
       this.add
         .image(328, 284, "blevel2")
         .setInteractive()
@@ -74,7 +74,7 @@ class selector extends Phaser.Scene {
           this.scene.start("gameplay");
         });
     } else {
-      this.add.image(603, 284, "bjvj");
+      this.add.image(603, 284, "bpvp");
       this.add
         .image(328, 284, "blevel2")
         .setInteractive()
