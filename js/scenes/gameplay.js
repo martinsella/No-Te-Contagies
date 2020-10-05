@@ -10,7 +10,7 @@ class gameplay extends Phaser.Scene {
 
   create() {
     //Creación de: background, personaje y pelota (si es necesario).
-    if (nivel == 1) {
+    if (level == 1) {
       this.add.image(400, 300, "background");
       player = new Player({ scene: this, x: 400, y: 300, texture: "player" });
       this.anims.create({
@@ -32,7 +32,7 @@ class gameplay extends Phaser.Scene {
       this.physics.add.collider(player, ball, () => {
         ball.anims.play("playBall", true);
       }, null, this);
-    } else if (nivel == 2) {
+    } else if (level == 2) {
       this.add.image(400, 300, "background2");
       player = new Player({ scene: this, x: 400, y: 150, texture: "player" });
     }
@@ -80,7 +80,7 @@ class gameplay extends Phaser.Scene {
       repeat: 0,
     });
 
-    if (nivel >= 2) {
+    if (level >= 2) {
       this.anims.create({
         key: "up2", //Definimos nombre a la animación.
         frames: this.anims.generateFrameNumbers("player2", {
@@ -154,7 +154,7 @@ class gameplay extends Phaser.Scene {
     colliders.create(400, -60, "collider2").setImmovable(true);
     colliders.create(400, 660, "collider2").setImmovable(true);
 
-    if (nivel == 2) {
+    if (level == 2) {
       trees = this.physics.add.staticGroup();
 
       trees
@@ -291,8 +291,8 @@ class gameplay extends Phaser.Scene {
 
     //creacion el evento para la generacion de objetos.
     timedEvent = this.time.addEvent({
-      delay: 2500,
-      callback: this.timeEvent,
+      delay: 750,
+      callback: this.objects,
       callbackScope: this,
       loop: true,
     });
@@ -319,215 +319,173 @@ class gameplay extends Phaser.Scene {
         y: 0.06,
       },
     });
-
-    if (nivel == 1) {
-      percentage = 0.5;
-    } else if (nivel == 2) {
-      percentage == 0.55;
-    }
   }
 
-  //funcion para randomizar los objetos
-  timeEvent() {
-    var GorE = Phaser.Math.FloatBetween(0, 1);
+  //funcion para aparicion de objetos.
+  objects() {
+    //Randomización del respawn
     pattern = Phaser.Math.FloatBetween(0, 1);
-    x = Phaser.Math.Between(0, 800);
-    x2 = Phaser.Math.Between(0, 800);
-    y = Phaser.Math.Between(0, 600);
-    y2 = Phaser.Math.Between(0, 600);
-
-    if (GorE <= percentage) {
-      this.badies();
-    } else {
-      this.goodies();
+    pattern2 = Phaser.Math.Between(0, 3);
+    if (pattern2 == 0) {
+      pattern3 = Phaser.Math.Between(1, 799);
+      pattern4 = 0;
+    } else if (pattern2 == 1) {
+      pattern3 = Phaser.Math.Between(1, 799);
+      pattern4 = 600;
+    } else if (pattern2 == 2) {
+      pattern3 = 0;
+      pattern4 = Phaser.Math.Between(1, 599);
+    } else if (pattern2 == 3) {
+      pattern3 = 800;
+      pattern4 = Phaser.Math.Between(1, 599);
     }
-  }
-
-  //funcion para aparicion de objetos malos
-  badies() {
-    if (pattern <= 0.5 && nivel > 1) {
-      bads
-        .create(x, 0, "mud")
-        .setVelocityY(200)
-        .setSize(500, 500, true)
-        .setScale(0.06);
-    } else if (pattern > 0.5 || nivel == 1) {
-      bads
-        .create(x, 0, "virus")
-        .setVelocityY(200)
-        .setSize(500, 500, true)
-        .setScale(0.06);
+    if (pattern3 == 0 || pattern4 == 0) {
+      velObj = 200;
+    } else if (pattern3 == 800 || pattern4 == 600) {
+      velObj = -200;
     }
-
-    if (pattern <= 0.5 || nivel == 1) {
-      bads
-        .create(0, y, "virus")
-        .setVelocityX(200)
-        .setSize(500, 500, true)
-        .setScale(0.06);
-    } else if (pattern > 0.5 && nivel > 1) {
-      bads
-        .create(0, y, "mud")
-        .setVelocityX(200)
-        .setSize(500, 500, true)
-        .setScale(0.06);
+    //Respawn de objetos.
+    if (level == 1) {
+      if (pattern < 0.1 && countvac == 0) {
+        if (pattern3 == 0 || pattern3 == 800) {
+          vaccine
+            .create(pattern3, pattern4, "syringe")
+            .setOrigin(0.9, 0.1)
+            .setSize(750, 350, true)
+            .setScale(0.08)
+            .setVelocityX(velObj);
+        } else if (pattern4 == 0 || pattern4 == 600) {
+          vaccine
+            .create(pattern3, pattern4, "syringe")
+            .setOrigin(0.9, 0.1)
+            .setSize(750, 350, true)
+            .setScale(0.08)
+            .setVelocityY(velObj);
+        }
+        countvac++
+      }
+      else if (pattern >= 0.1 && pattern < 0.55) {
+        if (pattern3 == 0 || pattern3 == 800) {
+          goods
+            .create(pattern3, pattern4, "soap")
+            .setSize(750, 450, true)
+            .setScale(0.05)
+            .setVelocityX(velObj);
+        } else if (pattern4 == 0 || pattern4 == 600) {
+          goods
+            .create(pattern3, pattern4, "soap")
+            .setSize(750, 450, true)
+            .setScale(0.05)
+            .setVelocityY(velObj);
+        }
+      }
+      else if (pattern >= 0.55 && pattern < 1) {
+        if (pattern3 == 0 || pattern3 == 800) {
+          bads
+            .create(pattern3, pattern4, "virus")
+            .setSize(500, 500, true)
+            .setScale(0.06)
+            .setVelocityX(velObj);
+        } else if (pattern4 == 0 || pattern4 == 600) {
+          bads
+            .create(pattern3, pattern4, "virus")
+            .setSize(500, 500, true)
+            .setScale(0.06)
+            .setVelocityY(velObj);
+        }
+      }
     }
-
-    if (pattern <= 0.5 && nivel > 1) {
-      bads
-        .create(800, y2, "mud")
-        .setVelocityX(-200)
-        .setSize(500, 500, true)
-        .setScale(0.06);
-    } else if (pattern > 0.5 || nivel == 1) {
-      bads
-        .create(800, y2, "virus")
-        .setVelocityX(-200)
-        .setSize(500, 500, true)
-        .setScale(0.06);
-    }
-
-    if (pattern <= 0.5 || nivel == 1) {
-      bads
-        .create(x2, 600, "virus")
-        .setVelocityY(-200)
-        .setSize(500, 500, true)
-        .setScale(0.06);
-    } else if (pattern > 0.5 && nivel > 1) {
-      bads
-        .create(x2, 600, "mud")
-        .setVelocityY(-200)
-        .setSize(500, 500, true)
-        .setScale(0.06);
-    }
-  }
-
-  //funcion para aparicion de objetos buenos
-  goodies() {
-    if (pattern >= 0.6 && nivel == 3) {
-      goods2
-        .create(x, 0, "alcohol")
-        .setVelocityY(200)
-        .setSize(200, 400, true)
-        .setScale(0.11);
-    } else if (pattern < 0.1 && countvac == 0) {
-      vaccine
-        .create(x, 0, "syringe")
-        .setVelocityY(200)
-        .setOrigin(0.9, 0.1)
-        .setSize(750, 350, true)
-        .setScale(0.08);
+    else if (level > 1) {
+    if (pattern < 0.1 && countvac == 0) {
+      if (pattern3 == 0 || pattern3 == 800) {
+        vaccine
+          .create(pattern3, pattern4, "syringe")
+          .setOrigin(0.9, 0.1)
+          .setSize(750, 350, true)
+          .setScale(0.08)
+          .setVelocityX(velObj);
+      } else if (pattern4 == 0 || pattern4 == 600) {
+        vaccine
+          .create(pattern3, pattern4, "syringe")
+          .setOrigin(0.9, 0.1)
+          .setSize(750, 350, true)
+          .setScale(0.08)
+          .setVelocityY(velObj);
+        }
       countvac++;
-    } else if (
-      pattern > 0.1 &&
-      pattern < 0.2 &&
-      nivel !== 1 &&
-      stopAnim == "stop"
-    ) {
-      chinstraps
-        .create(x, 0, "chinstrap")
-        .setVelocityY(200)
-        .setOrigin(0.9, 0.1)
-        .setSize(1000, 750, true)
-        .setScale(0.035);
-    } else if ((pattern >= 0.2 && pattern < 0.6) || nivel !== 3) {
-      goods
-        .create(x, 0, "soap")
-        .setVelocityY(200)
-        .setSize(750, 450, true)
-        .setScale(0.05);
-    }
-
-    if (pattern >= 0.2 && pattern < 0.6 && nivel == 3) {
-      goods2
-        .create(0, y, "alcohol")
-        .setVelocityX(200)
-        .setSize(200, 400, true)
-        .setScale(0.11);
-    } else if (pattern > 0.1 && pattern < 0.2 && countvac == 0) {
-      vaccine
-        .create(0, y, "syringe")
-        .setVelocityX(200)
-        .setOrigin(0.9, 0.1)
-        .setSize(750, 350, true)
-        .setScale(0.08);
-      countvac++;
-    } else if (pattern < 0.1 && nivel !== 1 && stopAnim == "stop") {
-      chinstraps
-        .create(0, y, "chinstrap")
-        .setVelocityX(200)
-        .setOrigin(0.9, 0.1)
-        .setSize(1000, 750, true)
-        .setScale(0.035);
-    } else if (pattern >= 0.6 || nivel !== 3) {
-      goods
-        .create(0, y, "soap")
-        .setVelocityX(200)
-        .setSize(750, 450, true)
-        .setScale(0.05);
-    }
-
-    if (pattern >= 0.5 && pattern < 0.9 && nivel == 3) {
-      goods2
-        .create(800, y2, "alcohol")
-        .setVelocityX(-200)
-        .setSize(200, 400, true)
-        .setScale(0.11);
-    } else if (pattern < 0.1 && countvac == 0) {
-      vaccine
-        .create(800, y2, "syringe")
-        .setVelocityX(-200)
-        .setOrigin(0.9, 0.1)
-        .setSize(750, 350, true)
-        .setScale(0.03);
-      countvac++;
-    } else if (pattern > 0.9 && nivel !== 1 && stopAnim == "stop") {
-      chinstraps
-        .create(800, y2, "chinstrap")
-        .setVelocityX(-200)
-        .setOrigin(0.9, 0.1)
-        .setSize(1000, 750, true)
-        .setScale(0.035);
-    } else if ((pattern >= 0.1 && pattern <= 0.5) || nivel !== 3) {
-      goods
-        .create(800, y2, "soap")
-        .setVelocityX(-200)
-        .setSize(750, 450, true)
-        .setScale(0.05);
-    }
-
-    if (pattern <= 0.4 && nivel == 3) {
-      goods2
-        .create(x2, 600, "alcohol")
-        .setVelocityY(-200)
-        .setSize(200, 400, true)
-        .setScale(0.11);
-    } else if (pattern > 0.9 && countvac == 0) {
-      vaccine
-        .create(x2, 600, "syringe")
-        .setVelocityY(-200)
-        .setOrigin(0.9, 0.1)
-        .setSize(750, 350, true)
-        .setScale(0.08);
-      countvac++;
-    } else if (
-      pattern > 0.8 &&
-      pattern <= 0.9 &&
-      nivel !== 1 &&
-      stopAnim == "stop"
-    ) {
-      chinstraps
-        .create(x2, 600, "chinstrap")
-        .setVelocityY(-200)
-        .setOrigin(0.9, 0.1)
-        .setSize(1000, 750, true)
-        .setScale(0.035);
-    } else if ((pattern > 0.4 && pattern <= 0.8) || nivel !== 3) {
-      goods
-        .create(x2, 600, "soap")
-        .setVelocityY(-200)
-        .setSize(750, 450, true)
-        .setScale(0.05);
+    } else if (pattern >= 0.1 && pattern < 0.2 && level !== 1 && stopAnim == "stop") {
+      if (pattern3 == 0 || pattern3 == 800) {
+        chinstraps
+          .create(pattern3, pattern4, "chinstrap")
+          .setOrigin(0.9, 0.1)
+          .setSize(1000, 750, true)
+          .setScale(0.035)
+          .setVelocityX(velObj);
+      } else if (pattern4 == 0 || pattern4 == 600) {
+        chinstraps
+          .create(pattern3, pattern4, "chinstrap")
+          .setOrigin(0.9, 0.1)
+          .setSize(1000, 750, true)
+          .setScale(0.035)
+          .setVelocityY(velObj);
+      }
+    } else if (pattern >= 0.2 && pattern < 0.4) {
+      if (pattern3 == 0 || pattern3 == 800) {
+        bads
+          .create(pattern3, pattern4, "virus")
+          .setSize(500, 500, true)
+          .setScale(0.06)
+          .setVelocityX(velObj);
+      } else if (pattern4 == 0 || pattern4 == 600) {
+        bads
+          .create(pattern3, pattern4, "virus")
+          .setSize(500, 500, true)
+          .setScale(0.06)
+          .setVelocityY(velObj);
+      }
+    } else if (pattern >= 0.4 && pattern < 0.6) {
+      if (pattern3 == 0 || pattern3 == 800) {
+        goods
+          .create(pattern3, pattern4, "soap")
+          .setSize(750, 450, true)
+          .setScale(0.05)
+          .setVelocityX(velObj);
+      } else if (pattern4 == 0 || pattern4 == 600) {
+        goods
+          .create(pattern3, pattern4, "soap")
+          .setSize(750, 450, true)
+          .setScale(0.05)
+          .setVelocityY(velObj);
+      }
+    } else if (pattern >= 0.6 && pattern < 0.8 && level > 1) {
+      if (pattern3 == 0 || pattern3 == 800) {
+        bads
+          .create(pattern3, pattern4, "mud")
+          .setSize(500, 500, true)
+          .setScale(0.06)
+          .setVelocityX(velObj);
+      } else if (pattern4 == 0 || pattern4 == 600) {
+        bads
+          .create(pattern3, pattern4, "mud")
+          .setSize(500, 500, true)
+          .setScale(0.06)
+          .setVelocityY(velObj);
+      }
+    } else if (pattern >= 0.8 && pattern < 1 && level == 3) {
+      if (pattern3 == 0 || pattern3 == 800) {
+        goods2
+          .create(pattern3, pattern4, "alcohol")
+          .setSize(200, 400, true)
+          .setScale(0.11)
+          .setVelocityX(velObj);
+      } else if (pattern4 == 0 || pattern4 == 600) { 
+        goods2
+          .create(pattern3, pattern4, "alcohol")
+          .setSize(200, 400, true)
+          .setScale(0.11)
+          .setVelocityY(velObj);
+      }
+      }
     }
   }
   
@@ -655,11 +613,11 @@ class gameplay extends Phaser.Scene {
   //Se ejecuta esta función al perderse todas las vidas.
   gameover() {
     this.physics.pause();
-    player.anims.play(stopAnim);
-    ball.anims.play("stopBall", true);
     timedEvent.paused = true;
-
-    if (nivel !== 1 && stopAnim == "stop2") {
+    player.anims.play(stopAnim);
+    if (level == 1) {
+      ball.anims.play("stopBall", true);
+    } else if (level !== 1 && stopAnim == "stop2") {
       upAnim = "up";
       downAnim = "down";
       rightAnim = "right";
@@ -687,9 +645,9 @@ class gameplay extends Phaser.Scene {
     this.physics.pause();
     timedEvent.paused = true;
     player.anims.play(stopAnim);
-    ball.anims.play("stopBall", true);
-
-    if (nivel !== 1 && stopAnim == "stop2") {
+    if (level == 1) {
+      ball.anims.play("stopBall", true);
+    } else if (level !== 1 && stopAnim == "stop2") {
       upAnim = "up";
       downAnim = "down";
       rightAnim = "right";
@@ -718,11 +676,11 @@ class gameplay extends Phaser.Scene {
   continue() {
     lives = 3;
     score = 0;
-    if (nivel == 1) {
-      nivel++;
-      nivsup++;
+    if (level == 1) {
+      level++;
+      levOver++;
     }
-    if (nivel !== 1 && stopAnim == "stop2") {
+    if (level !== 1 && stopAnim == "stop2") {
       stopAnim = "stop";
     }
     this.scene.start("gameplay");
@@ -731,7 +689,7 @@ class gameplay extends Phaser.Scene {
   restart() {
     this.scene.start("gameplay");
     timedEvent.paused = false;
-    if (nivel !== 1 && stopAnim == "stop2") {
+    if (level !== 1 && stopAnim == "stop2") {
       stopAnim = "stop";
     }
     lives = 3;
@@ -744,7 +702,7 @@ class gameplay extends Phaser.Scene {
     timedEvent.paused = false;
     lives = 3;
     score = 0;
-    if (nivel !== 1 && stopAnim == "stop2") {
+    if (level !== 1 && stopAnim == "stop2") {
       upAnim = "up";
       downAnim = "down";
       rightAnim = "right";
@@ -759,7 +717,9 @@ class gameplay extends Phaser.Scene {
     bpause.destroy();
     this.physics.pause();
     player.anims.play(stopAnim);
-    ball.anims.play("stopBall", true);
+    if (level == 1){
+      ball.anims.play("stopBall", true);
+    }
     menu = this.add.image(400, 300, "pause");
 
     button = this.add
@@ -790,6 +750,9 @@ class gameplay extends Phaser.Scene {
     button3.destroy();
     button4.destroy();
 
+    if (level == 1){
+      ball.anims.play("playBall", true);
+    }
     this.physics.resume();
     timedEvent.paused = false;
     bpause = this.add

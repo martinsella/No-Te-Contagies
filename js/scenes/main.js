@@ -48,6 +48,7 @@ class main extends Phaser.Scene {
     this.load.image("b6", "assets/images/buttons/b6.png");
     this.load.image("b7", "assets/images/buttons/b7.png");
     this.load.image("b8", "assets/images/buttons/b8.png");
+    this.load.image("bfscreen", "assets/images/buttons/bfscreen.png");
     this.load.image("bplay", "assets/images/buttons/bplay.png");
     this.load.image("bpause", "assets/images/buttons/bpause.png");
     this.load.image("bstore", "assets/images/buttons/bstore.png");
@@ -139,7 +140,7 @@ class main extends Phaser.Scene {
         window.location.href = "http://www.google.com";
       });
     this.add
-      .image(770, 30, "bpause")
+      .image(770, 30, "bfscreen")
       .setInteractive()
       .on("pointerdown", () => {
         if (this.scale.isFullscreen) {

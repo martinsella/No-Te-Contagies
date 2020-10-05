@@ -13,8 +13,8 @@ class selector extends Phaser.Scene {
       .image(189, 284, "blevel1")
       .setInteractive()
       .on("pointerdown", () => {
-        if (nivel != 1) {
-          nivel = 1;
+        if (level != 1) {
+          level = 1;
         }
         track.pause();
         this.scene.start("gameplay");
@@ -25,14 +25,14 @@ class selector extends Phaser.Scene {
       .setInteractive()
       .on("pointerdown", () => this.scene.start("main"));
 
-    if (nivsup == 0) {
+    if (levOver == 0) {
       this.add.image(328, 284, "blocked");
       this.add.image(465, 284, "blocked");
       this.add
         .image(603, 284, "bpvplocked")
         .setInteractive()
         .on("pointerover", () => iobject = this.add.image(603, 284, "ipvp"));
-    } else if (nivsup == 1) {
+    } else if (levOver == 1) {
       this.add.image(465, 284, "blocked");
       this.add
         .image(603, 284, "bpvplocked")
@@ -42,13 +42,13 @@ class selector extends Phaser.Scene {
         .image(328, 284, "blevel2")
         .setInteractive()
         .on("pointerdown", () => {
-          if (nivel != 2) {
-            nivel = 2;
+          if (level != 2) {
+            level = 2;
           }
           track.pause();
           this.scene.start("gameplay");
         });
-    } else if (nivsup == 2) {
+    } else if (levOver == 2) {
       this.add
         .image(603, 284, "bpvplocked")
         .setInteractive()
@@ -57,8 +57,8 @@ class selector extends Phaser.Scene {
         .image(328, 284, "blevel2")
         .setInteractive()
         .on("pointerdown", () => {
-          if (nivel != 2) {
-            nivel = 2;
+          if (level != 2) {
+            level = 2;
           }
         });
       track.pause();
@@ -67,8 +67,8 @@ class selector extends Phaser.Scene {
         .image(465, 284, "blevel3")
         .setInteractive()
         .on("pointerdown", () => {
-          if (nivel != 3) {
-            nivel = 3;
+          if (level != 3) {
+            level = 3;
           }
           track.pause();
           this.scene.start("gameplay");
@@ -79,8 +79,8 @@ class selector extends Phaser.Scene {
         .image(328, 284, "blevel2")
         .setInteractive()
         .on("pointerdown", () => {
-          if (nivel != 2) {
-            nivel = 2;
+          if (level != 2) {
+            level = 2;
           }
         });
       track.pause();
@@ -89,8 +89,8 @@ class selector extends Phaser.Scene {
         .image(465, 284, "blevel3")
         .setInteractive()
         .on("pointerdown", () => {
-          if (nivel != 3) {
-            nivel = 3;
+          if (level != 3) {
+            level = 3;
           }
           track.pause();
           this.scene.start("gameplay");
