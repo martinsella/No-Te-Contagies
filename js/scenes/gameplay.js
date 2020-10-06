@@ -1,5 +1,18 @@
 import Player from "../classes/player.js";
 import Ball from "../classes/ball.js";
+import Collider from "../classes/collider.js";
+import Mud from "../classes/mud.js";
+import {velMud} from "../classes/mud.js";
+import Virus from "../classes/virus.js";
+import { velVirus } from "../classes/virus.js";
+import Soap from "../classes/soap.js";
+import { velSoap } from "../classes/soap.js";
+import Alcohol from "../classes/alcohol.js";
+import {velAlcohol} from "../classes/alcohol.js";
+import Chinstrap from "../classes/chinstrap.js";
+import {velChinstrap} from "../classes/chinstrap.js";
+import Vaccine from "../classes/vaccine.js";
+import { velVaccine } from "../classes/vaccine.js";
 
 //Definimos la clase (debe coincidir con el nombre de la escena, por ejemplo, scene1)
 class gameplay extends Phaser.Scene {
@@ -28,10 +41,16 @@ class gameplay extends Phaser.Scene {
         framerate: 10,
         repeat: 0,
       });
-      ball = new Ball({ scene: this, x: 280, y: 350, texture: "ball" })
-      this.physics.add.collider(player, ball, () => {
-        ball.anims.play("playBall", true);
-      }, null, this);
+      ball = new Ball({ scene: this, x: 280, y: 350, texture: "ball" });
+      this.physics.add.collider(
+        player,
+        ball,
+        () => {
+          ball.anims.play("playBall", true);
+        },
+        null,
+        this
+      );
     } else if (level == 2) {
       this.add.image(400, 300, "background2");
       player = new Player({ scene: this, x: 400, y: 150, texture: "player" });
@@ -125,34 +144,13 @@ class gameplay extends Phaser.Scene {
       });
     }
 
-    //creacion de objetos y colliders.
-    bads = this.physics.add.group(); //grupo de objetos malos (contienen físicas).
-    goods = this.physics.add.group(); //grupo de objetos buenos (contienen físicas).
-    goods2 = this.physics.add.group(); //grupo de objetos buenos (contienen físicas).
-    vaccine = this.physics.add.group(); //grupo de vacunas, porque tiene que comportarse diferente que los demás objetos buenos por el boost que otorga (contienen físicas).
-    chinstraps = this.physics.add.group(); //grupo de barbijos, por el mismo motivo anterior (se comportará un tanto diferente a los demás objetos buenos). (Contienen físicas).
-
-    this.physics.add.overlap(player, bads, this.badsHit, null, this); //collider que ejecuta la función "badHit" cuando el jugador choca con un objeto malo (línea 297).
-    this.physics.add.overlap(player, goods, this.collectGoods, null, this); //collider que ejecuta la función "collectGoods" cuando el jugador choca con un objeto bueno (línea 291).
-    this.physics.add.overlap(player, goods2, this.collectGoods2, null, this); //collider que ejecuta la función "collectGoods" cuando el jugador choca con un objeto bueno (línea 291).
-    this.physics.add.overlap(
-      player,
-      chinstraps,
-      this.collectChinstrap,
-      null,
-      this
-    ); //collider que ejecuta la función "collectGoods" cuando el jugador choca con un barbijo (línea 291).
-    //El escudo de inmunidad por unos segundos que otorgaría el barbijo TODAVIA NO SE PROGRAMÓ (estructura formada para futura funcionalidad).
-
-    //collider que ejecutan la función de boost de velocidad por 10s.
-    this.physics.add.overlap(player, vaccine, this.vaccinated, null, this);
-
-    colliders = this.physics.add.staticGroup(); // creamos un grupo de objetos que funcionarán como colliders para la eliminación de objetos una vez salidos de la pantalla.
-    //seteamos donde se creará (puntos 'x' e 'y'), seguido del nombre del asset (definido en la escena "game.js").
-    colliders.create(-60, 300, "collider").setImmovable(true); //definimos como "objetos inamovibles" a los colliders.
-    colliders.create(860, 300, "collider").setImmovable(true);
-    colliders.create(400, -60, "collider2").setImmovable(true);
-    colliders.create(400, 660, "collider2").setImmovable(true);
+    //creación de colliders que irán eliminando los objetos a medida que colisionen con ellos.
+    collider = [
+      new Collider({scene: this, x: -60, y: 300, texture: "collider"}),
+      new Collider({scene: this, x: 860, y: 300, texture: "collider"}),
+      new Collider({scene: this, x: 400, y: -60, texture: "collider2"}),
+      new Collider({scene: this, x: 400, y: 660, texture: "collider2"})
+    ]
 
     if (level == 2) {
       trees = this.physics.add.staticGroup();
@@ -250,33 +248,20 @@ class gameplay extends Phaser.Scene {
             (downRight = false), (b8.alpha += 1);
           }));
     else {
-      cursors = this.input.keyboard.createCursorKeys(),
-      FKey = this.input.keyboard.addKey('F');
-      FKey.on('down', () => {
-        if (this.scale.isFullscreen) {
-        this.scale.stopFullscreen();
-      } else {
-        this.scale.startFullscreen();
-      }}, this);
+      (cursors = this.input.keyboard.createCursorKeys()),
+        (FKey = this.input.keyboard.addKey("F"));
+      FKey.on(
+        "down",
+        () => {
+          if (this.scale.isFullscreen) {
+            this.scale.stopFullscreen();
+          } else {
+            this.scale.startFullscreen();
+          }
+        },
+        this
+      );
     }
-
-    this.physics.add.collider(colliders, bads, this.badsErrase, null, this); //collider que ejecuta la función "badsErrase" cuando un objeto malo choca con un collider (línea 312).
-    this.physics.add.collider(colliders, goods, this.goodsErrase, null, this); //collider que ejecuta la función "goodsErrase" cuando un objeto bueno choca con un collider (línea 316).
-    this.physics.add.collider(colliders, goods2, this.goodsErrase, null, this); //collider que ejecuta la función "goodsErrase" cuando un objeto bueno choca con un collider (línea 316).
-    this.physics.add.collider(
-      colliders,
-      vaccine,
-      this.vaccineErrase,
-      null,
-      this
-    ); //collider que ejecuta la función "vaccineErrase" cuando una vacuna choca con un collider (línea 320).
-    this.physics.add.collider(
-      colliders,
-      chinstraps,
-      this.chinstrapsErrase,
-      null,
-      this
-    ); //collider que ejecuta la función "chinstrapsErrase" cuando un barbijo choca con un collider (línea 324).
 
     //seteo de velocidad de movimiento del personaje y contador de respawn de vacunas.
     countvac = 0;
@@ -321,9 +306,8 @@ class gameplay extends Phaser.Scene {
     });
   }
 
-  //funcion para aparicion de objetos.
   objects() {
-    //Randomización del respawn
+    //Randomización del respawn de objetos.
     pattern = Phaser.Math.FloatBetween(0, 1);
     pattern2 = Phaser.Math.Between(0, 3);
     if (pattern2 == 0) {
@@ -347,148 +331,55 @@ class gameplay extends Phaser.Scene {
     //Respawn de objetos.
     if (level == 1) {
       if (pattern < 0.1 && countvac == 0) {
-        if (pattern3 == 0 || pattern3 == 800) {
-          vaccine
-            .create(pattern3, pattern4, "syringe")
-            .setOrigin(0.9, 0.1)
-            .setSize(750, 350, true)
-            .setScale(0.08)
-            .setVelocityX(velObj);
-        } else if (pattern4 == 0 || pattern4 == 600) {
-          vaccine
-            .create(pattern3, pattern4, "syringe")
-            .setOrigin(0.9, 0.1)
-            .setSize(750, 350, true)
-            .setScale(0.08)
-            .setVelocityY(velObj);
-        }
-        countvac++
+        vaccine = new Vaccine({ scene: this, x: pattern3, y: pattern4 });
+        velVaccine();
+        countvac++;
+      } else if (pattern >= 0.1 && pattern < 0.55) {
+        soap = new Soap({ scene: this, x: pattern3, y: pattern4 });
+        velSoap();
+      } else if (pattern >= 0.55 && pattern < 1) {
+        virus = new Virus({ scene: this, x: pattern3, y: pattern4 });
+        velVirus();
       }
-      else if (pattern >= 0.1 && pattern < 0.55) {
-        if (pattern3 == 0 || pattern3 == 800) {
-          goods
-            .create(pattern3, pattern4, "soap")
-            .setSize(750, 450, true)
-            .setScale(0.05)
-            .setVelocityX(velObj);
-        } else if (pattern4 == 0 || pattern4 == 600) {
-          goods
-            .create(pattern3, pattern4, "soap")
-            .setSize(750, 450, true)
-            .setScale(0.05)
-            .setVelocityY(velObj);
-        }
-      }
-      else if (pattern >= 0.55 && pattern < 1) {
-        if (pattern3 == 0 || pattern3 == 800) {
-          bads
-            .create(pattern3, pattern4, "virus")
-            .setSize(500, 500, true)
-            .setScale(0.06)
-            .setVelocityX(velObj);
-        } else if (pattern4 == 0 || pattern4 == 600) {
-          bads
-            .create(pattern3, pattern4, "virus")
-            .setSize(500, 500, true)
-            .setScale(0.06)
-            .setVelocityY(velObj);
-        }
+    } else if (level > 1) {
+      if (pattern < 0.1 && countvac == 0) {
+        vaccine = new Vaccine({ scene: this, x: pattern3, y: pattern4 });
+        velVaccine();
+        countvac++;
+      } else if (pattern >= 0.1 && pattern < 0.2 && level !== 1 && stopAnim == "stop") {
+        chinstrap = new Chinstrap({ scene: this, x: pattern3, y: pattern4 });
+        velChinstrap();
+      } else if (pattern >= 0.2 && pattern < 0.4) {
+        virus = new Virus({ scene: this, x: pattern3, y: pattern4 });
+        velVirus();
+      } else if (pattern >= 0.4 && pattern < 0.6) {
+        soap = new Soap({ scene: this, x: pattern3, y: pattern4 });
+        velSoap();
+      } else if (pattern >= 0.6 && pattern < 0.8 && level > 1) {
+        mud = new Mud({ scene: this, x: pattern3, y: pattern4 });
+        velMud();
+      } else if (pattern >= 0.8 && pattern < 1 && level == 3) {
+          alcohol = new Alcohol({ scene: this, x: pattern3, y: pattern4 });
+          velAlcohol();
       }
     }
-    else if (level > 1) {
-    if (pattern < 0.1 && countvac == 0) {
-      if (pattern3 == 0 || pattern3 == 800) {
-        vaccine
-          .create(pattern3, pattern4, "syringe")
-          .setOrigin(0.9, 0.1)
-          .setSize(750, 350, true)
-          .setScale(0.08)
-          .setVelocityX(velObj);
-      } else if (pattern4 == 0 || pattern4 == 600) {
-        vaccine
-          .create(pattern3, pattern4, "syringe")
-          .setOrigin(0.9, 0.1)
-          .setSize(750, 350, true)
-          .setScale(0.08)
-          .setVelocityY(velObj);
-        }
-      countvac++;
-    } else if (pattern >= 0.1 && pattern < 0.2 && level !== 1 && stopAnim == "stop") {
-      if (pattern3 == 0 || pattern3 == 800) {
-        chinstraps
-          .create(pattern3, pattern4, "chinstrap")
-          .setOrigin(0.9, 0.1)
-          .setSize(1000, 750, true)
-          .setScale(0.035)
-          .setVelocityX(velObj);
-      } else if (pattern4 == 0 || pattern4 == 600) {
-        chinstraps
-          .create(pattern3, pattern4, "chinstrap")
-          .setOrigin(0.9, 0.1)
-          .setSize(1000, 750, true)
-          .setScale(0.035)
-          .setVelocityY(velObj);
-      }
-    } else if (pattern >= 0.2 && pattern < 0.4) {
-      if (pattern3 == 0 || pattern3 == 800) {
-        bads
-          .create(pattern3, pattern4, "virus")
-          .setSize(500, 500, true)
-          .setScale(0.06)
-          .setVelocityX(velObj);
-      } else if (pattern4 == 0 || pattern4 == 600) {
-        bads
-          .create(pattern3, pattern4, "virus")
-          .setSize(500, 500, true)
-          .setScale(0.06)
-          .setVelocityY(velObj);
-      }
-    } else if (pattern >= 0.4 && pattern < 0.6) {
-      if (pattern3 == 0 || pattern3 == 800) {
-        goods
-          .create(pattern3, pattern4, "soap")
-          .setSize(750, 450, true)
-          .setScale(0.05)
-          .setVelocityX(velObj);
-      } else if (pattern4 == 0 || pattern4 == 600) {
-        goods
-          .create(pattern3, pattern4, "soap")
-          .setSize(750, 450, true)
-          .setScale(0.05)
-          .setVelocityY(velObj);
-      }
-    } else if (pattern >= 0.6 && pattern < 0.8 && level > 1) {
-      if (pattern3 == 0 || pattern3 == 800) {
-        bads
-          .create(pattern3, pattern4, "mud")
-          .setSize(500, 500, true)
-          .setScale(0.06)
-          .setVelocityX(velObj);
-      } else if (pattern4 == 0 || pattern4 == 600) {
-        bads
-          .create(pattern3, pattern4, "mud")
-          .setSize(500, 500, true)
-          .setScale(0.06)
-          .setVelocityY(velObj);
-      }
-    } else if (pattern >= 0.8 && pattern < 1 && level == 3) {
-      if (pattern3 == 0 || pattern3 == 800) {
-        goods2
-          .create(pattern3, pattern4, "alcohol")
-          .setSize(200, 400, true)
-          .setScale(0.11)
-          .setVelocityX(velObj);
-      } else if (pattern4 == 0 || pattern4 == 600) { 
-        goods2
-          .create(pattern3, pattern4, "alcohol")
-          .setSize(200, 400, true)
-          .setScale(0.11)
-          .setVelocityY(velObj);
-      }
-      }
-    }
+
+    //creacion de colliders.
+    this.physics.add.overlap(player, mud, this.mudHit, null, this); //collider que ejecuta una función al agarrar un barro.
+    this.physics.add.overlap(player, virus, this.virusHit, null, this); //collider que ejecuta una función al agarrar un virus.
+    this.physics.add.overlap(player, soap, this.collectSoap, null, this); //collider que ejecuta una función al agarrar un jabón.
+    this.physics.add.overlap(player, alcohol, this.collectAlcohol, null, this); //collider que ejecuta una función al agarrar alcohol.
+    this.physics.add.overlap(player, chinstrap, this.collectChinstrap, null, this); //collider que ejecuta una función al agarrar una vacuna.
+    this.physics.add.overlap(player, vaccine, this.vaccinated, null, this); //collider que ejecutan la función de boost de velocidad por 10s.
+    this.physics.add.collider(collider, mud, this.mudErrase, null, this); //collider que ejecuta una función cuando un barro choca con un collider.
+    this.physics.add.collider(collider, virus, this.virusErrase, null, this); //collider que ejecuta una función cuando un virus choca con un collider.
+    this.physics.add.collider(collider, soap, this.soapErrase, null, this); //collider que ejecuta una función cuando un jabón choca con un collider.
+    this.physics.add.collider(collider, alcohol, this.alcoholErrase, null, this); //collider que ejecuta una función cuando un alcohol choca con un collider.
+    this.physics.add.collider(collider, vaccine, this.vaccineErrase, null, this); //collider que ejecuta una función cuando una vacuna choca con un collider.
+    this.physics.add.collider(collider, chinstrap, this.chinstrapErrase, null, this); //collider que ejecuta una función cuando un barbijo choca con un collider.
+
   }
-  
+
   update() {
     if (lives <= 0) {
       this.gameover();
@@ -498,35 +389,49 @@ class gameplay extends Phaser.Scene {
     }
   }
 
-  collectGoods(player, goods) {
-    goods.destroy();
+  collectSoap(player, soap) {
+    soap.destroy();
     progressBar.fillRect(19, 19, (score += 10), 19);
     track = this.sound.add("goodiesfx", { loop: false });
     track.play();
   }
 
-  collectGoods2(player, goods2) {
-    goods2.destroy();
+  collectAlcohol(player, alcohol) {
+    alcohol.destroy();
     progressBar.fillRect(19, 19, (score += 7.5), 19);
     track = this.sound.add("goodiesfx", { loop: false });
     track.play();
   }
 
-  badsHit(player, bads) {
-    bads.destroy();
+  mudHit(player, mud) {
+    mud.destroy();
     if (stopAnim == "stop2") {
       this.endChinstrap();
     } else {
       lives--;
-      if (lives > -1) {
-        // Se quita un corazón cada vez que se choca con un objeto malo
-        var corazonErrase = hearts.getChildren()[
-          hearts.getChildren().length - 1
-        ];
+    }
+    this.loseLive();
+  }
 
-        if (corazonErrase !== undefined) {
-          corazonErrase.destroy();
-        }
+  virusHit(player, virus) {
+    virus.destroy();
+    if (stopAnim == "stop2") {
+      this.endChinstrap();
+    } else {
+      lives--;
+    }
+    this.loseLive();
+  }
+
+  loseLive() {
+    if (lives > -1) {
+      // Se quita un corazón cada vez que se choca con un objeto malo
+      heartErrase = hearts.getChildren()[
+        hearts.getChildren().length - 1
+      ];
+
+      if (heartErrase !== undefined) {
+        heartErrase.destroy();
       }
     }
   }
@@ -566,8 +471,8 @@ class gameplay extends Phaser.Scene {
     timedEvent2.pause = true;
   }
 
-  collectChinstrap(player, chinstraps) {
-    chinstraps.destroy();
+  collectChinstrap(player, chinstrap) {
+    chinstrap.destroy();
     player.setTexture("player2");
     upAnim = "up2";
     downAnim = "down2";
@@ -594,20 +499,23 @@ class gameplay extends Phaser.Scene {
     stopAnim = "stop";
   }
 
-  badsErrase(collider, bads) {
-    bads.destroy();
+  mudErrase(collider, mud) {
+    mud.destroy();
   }
-
-  goodsErrase(collider, goods) {
-    goods.destroy();
+  virusErrase(collider, virus) {
+    virus.destroy();
   }
-
+  soapErrase(collider, soap) {
+    soap.destroy();
+  }
+  alcoholErrase(collider, alcohol) {
+    alcohol.destroy();
+  }
   vaccineErrase(collider, vaccine) {
     vaccine.destroy();
   }
-
-  chinstrapsErrase(collider, chinstraps) {
-    chinstraps.destroy();
+  chinstrapErrase(collider, chinstrap) {
+    chinstrap.destroy();
   }
 
   //Se ejecuta esta función al perderse todas las vidas.
@@ -717,7 +625,7 @@ class gameplay extends Phaser.Scene {
     bpause.destroy();
     this.physics.pause();
     player.anims.play(stopAnim);
-    if (level == 1){
+    if (level == 1) {
       ball.anims.play("stopBall", true);
     }
     menu = this.add.image(400, 300, "pause");
@@ -750,7 +658,7 @@ class gameplay extends Phaser.Scene {
     button3.destroy();
     button4.destroy();
 
-    if (level == 1){
+    if (level == 1) {
       ball.anims.play("playBall", true);
     }
     this.physics.resume();
