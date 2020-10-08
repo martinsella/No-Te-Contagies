@@ -154,7 +154,6 @@ class gameplay extends Phaser.Scene {
 
     if (level == 2) {
       trees = this.physics.add.staticGroup();
-
       trees
         .create(650, 150, "tree")
         .setImmovable(true)
@@ -165,10 +164,8 @@ class gameplay extends Phaser.Scene {
         .setImmovable(true)
         .setSize(45, 45)
         .setOrigin(0.57, 0.43);
-
       font = this.physics.add.staticGroup();
       font.create(400, 300, "font").setImmovable(true).setSize(145, 140);
-
       this.physics.add.collider(player, trees);
       this.physics.add.collider(player, font);
     }
@@ -409,8 +406,8 @@ class gameplay extends Phaser.Scene {
       this.endChinstrap();
     } else {
       lives--;
+      this.loseLive();
     }
-    this.loseLive();
   }
 
   virusHit(player, virus) {
@@ -419,8 +416,8 @@ class gameplay extends Phaser.Scene {
       this.endChinstrap();
     } else {
       lives--;
+      this.loseLive();
     }
-    this.loseLive();
   }
 
   loseLive() {
@@ -468,7 +465,7 @@ class gameplay extends Phaser.Scene {
     vel2X2 = 170;
     vel2Y = 170;
     vel2Y2 = -170;
-    timedEvent2.pause = true;
+    timedEvent2.remove(true);
   }
 
   collectChinstrap(player, chinstrap) {
