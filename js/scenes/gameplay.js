@@ -51,15 +51,22 @@ class gameplay extends Phaser.Scene {
         null,
         this
       );
+      lvlmsc = this.sound.add('lvl1msc', { loop: true });
+      lvlmsc.play();
     } else if (level == 2) {
       this.add.image(400, 300, "background2");
       player = new Player({ scene: this, x: 400, y: 150, texture: "player" });
+      lvlmsc = this.sound.add('lvl2msc', { loop: true });
+      lvlmsc.play();
     }
 
     bpause = this.add
       .image(770, 30, "bpause")
       .setInteractive()
-      .on("pointerdown", () => this.pause());
+      .on("pointerdown", () => {
+        this.pause()
+        bnextsfx.play();
+      });
 
     //Creamos las animaciones del personaje.
     this.anims.create({
@@ -379,9 +386,11 @@ class gameplay extends Phaser.Scene {
 
   update() {
     if (lives <= 0) {
+      lvlmsc.stop();
       this.gameover();
     }
     if (score >= 200) {
+      lvlmsc.stop();
       this.lvlfinish();
     }
   }
@@ -389,19 +398,21 @@ class gameplay extends Phaser.Scene {
   collectSoap(player, soap) {
     soap.destroy();
     progressBar.fillRect(19, 19, (score += 10), 19);
-    track = this.sound.add("goodiesfx", { loop: false });
+    track = this.sound.add("goodsfx", { loop: false });
     track.play();
   }
 
   collectAlcohol(player, alcohol) {
     alcohol.destroy();
     progressBar.fillRect(19, 19, (score += 7.5), 19);
-    track = this.sound.add("goodiesfx", { loop: false });
+    track = this.sound.add("goodsfx", { loop: false });
     track.play();
   }
 
   mudHit(player, mud) {
     mud.destroy();
+    badsfx = this.sound.add('badsfx', { loop: false });
+    badsfx.play();
     if (stopAnim == "stop2") {
       this.endChinstrap();
     } else {
@@ -412,6 +423,8 @@ class gameplay extends Phaser.Scene {
 
   virusHit(player, virus) {
     virus.destroy();
+    badsfx = this.sound.add('badsfx', { loop: false });
+    badsfx.play();
     if (stopAnim == "stop2") {
       this.endChinstrap();
     } else {
@@ -437,7 +450,7 @@ class gameplay extends Phaser.Scene {
   vaccinated(player, vaccine) {
     vaccine.destroy();
     progressBar.fillRect(19, 19, (score += 40), 19);
-    track = this.sound.add("chinstrapfx", { loop: false });
+    track = this.sound.add("vaccinesfx", { loop: false });
     track.play();
     velX = -300;
     velX2 = 300;
@@ -477,7 +490,7 @@ class gameplay extends Phaser.Scene {
     leftAnim = "left2";
     stopAnim = "stop2";
     progressBar.fillRect(19, 19, (score += 5), 19);
-    track = this.sound.add("goodiesfx", { loop: false });
+    track = this.sound.add("goodsfx", { loop: false });
     track.play();
     timedEvent3 = this.time.addEvent({
       delay: 10000,
@@ -534,12 +547,19 @@ class gameplay extends Phaser.Scene {
     this.add
       .image(325, 315, "bretry")
       .setInteractive()
-      .on("pointerdown", () => this.restart());
+      .on("pointerdown", () => {
+        this.restart()
+        bnextsfx.play();
+      });
 
     this.add
       .image(475, 315, "bmenu")
       .setInteractive()
-      .on("pointerdown", () => this.exit());
+      .on("pointerdown", () => {
+        this.exit()
+        lvlmsc.stop();
+        bnextsfx.play();
+      });
   }
 
   //Se ejecuta esta función al ganarse un nivel.
@@ -550,6 +570,7 @@ class gameplay extends Phaser.Scene {
     this.physics.pause();
     timedEvent.paused = true;
     player.anims.play(stopAnim);
+    
     if (level == 1) {
       ball.anims.play("stopBall", true);
     } else if (level !== 1 && stopAnim == "stop2") {
@@ -562,19 +583,30 @@ class gameplay extends Phaser.Scene {
     this.add.image(400, 300, "overcome");
 
     this.add
-      .image(250, 315, "bcontinue")
+      .image(400, 315, "bcontinue")
+      .setScale(1.2)
       .setInteractive()
-      .on("pointerdown", () => this.continue());
+      .on("pointerdown", () => {
+        this.continue()
+        bnextsfx.play();
+      });
 
     this.add
-      .image(400, 315, "bretry")
+      .image(290, 390, "bretry")
       .setInteractive()
-      .on("pointerdown", () => this.restart());
+      .on("pointerdown", () => {
+        this.restart()
+        bnextsfx.play();
+      });
 
     this.add
-      .image(550, 315, "bmenu")
+      .image(510, 390, "bmenu")
       .setInteractive()
-      .on("pointerdown", () => this.exit());
+      .on("pointerdown", () => {
+        this.exit()
+        lvlmsc.stop()
+        bbacksfx.play();
+      });
   }
 
   //Si se elige "reintentar nivel" se ejecuta esta función.
@@ -630,22 +662,35 @@ class gameplay extends Phaser.Scene {
     button = this.add
       .image(335, 285, "bresume")
       .setInteractive()
-      .on("pointerdown", () => this.outPause());
+      .on("pointerdown", () => {
+        this.outPause()
+        bnextsfx.play();
+      });
 
     button2 = this.add
       .image(465, 285, "boptions2")
       .setInteractive()
-      .on("pointerdown", () => this.gameOptions());
+      .on("pointerdown", () => {
+        this.gameOptions()
+        bnextsfx.play();
+      });
 
     button3 = this.add
       .image(335, 355, "bhelp2")
       .setInteractive()
-      .on("pointerdown", () => this.gameHelp());
+      .on("pointerdown", () => {
+        this.gameHelp()
+        bnextsfx.play();
+      });
 
     button4 = this.add
       .image(465, 355, "bmenu")
       .setInteractive()
-      .on("pointerdown", () => this.exit());
+      .on("pointerdown", () => {
+        bbacksfx.play();
+        this.exit()
+        lvlmsc.stop()
+      });
   }
 
   outPause() {
@@ -663,7 +708,10 @@ class gameplay extends Phaser.Scene {
     bpause = this.add
       .image(770, 30, "bpause")
       .setInteractive()
-      .on("pointerdown", () => this.pause());
+      .on("pointerdown", () => {
+        this.pause()
+        bnextsfx.play();
+      });
   }
 
   gameOptions() {
@@ -676,7 +724,10 @@ class gameplay extends Phaser.Scene {
     button = this.add
       .image(259, 404, "bback")
       .setInteractive()
-      .on("pointerdown", () => this.outOptions());
+      .on("pointerdown", () => {
+        this.outOptions()
+        bbacksfx.play();
+      });
 
     button2 = this.add.image(422, 284, "bar");
     button3 = this.add.image(422, 344, "bar");
@@ -802,12 +853,18 @@ class gameplay extends Phaser.Scene {
     button = this.add
       .image(102, 90, "bback")
       .setInteractive()
-      .on("pointerdown", () => this.outHelp());
+      .on("pointerdown", () => {
+        this.outHelp()
+        bbacksfx.play();
+      });
 
     button2 = this.add
       .image(677, 514, "bcontrols")
       .setInteractive()
-      .on("pointerdown", () => this.gameControls());
+      .on("pointerdown", () => {
+        this.gameControls()
+        bnextsfx.play();
+      });
   }
 
   outHelp() {
@@ -843,7 +900,10 @@ class gameplay extends Phaser.Scene {
     button = this.add
       .image(102, 90, "bback")
       .setInteractive()
-      .on("pointerdown", () => this.outControls());
+      .on("pointerdown", () => {
+        this.outControls()
+        bbacksfx.play();
+      });
   }
 
   outControls() {

@@ -16,6 +16,7 @@ class selector extends Phaser.Scene {
         if (level != 1) {
           level = 1;
         }
+        bnextsfx.play();
         track.pause();
         this.scene.start("gameplay");
       });
@@ -23,7 +24,10 @@ class selector extends Phaser.Scene {
     this.add
       .image(132, 131, "bback")
       .setInteractive()
-      .on("pointerdown", () => this.scene.start("main"));
+      .on("pointerdown", () => {
+        this.scene.start("main")
+        bbacksfx.play();
+      });
 
     if (levOver == 0) {
       this.add.image(328, 284, "blocked");
@@ -45,6 +49,7 @@ class selector extends Phaser.Scene {
           if (level != 2) {
             level = 2;
           }
+          bnextsfx.play();
           track.pause();
           this.scene.start("gameplay");
         });
@@ -70,6 +75,7 @@ class selector extends Phaser.Scene {
           if (level != 3) {
             level = 3;
           }
+          bnextsfx.play();
           track.pause();
           this.scene.start("gameplay");
         });
@@ -83,6 +89,7 @@ class selector extends Phaser.Scene {
             level = 2;
           }
         });
+      bnextsfx.play();
       track.pause();
       this.scene.start("gameplay");
       this.add

@@ -9,7 +9,10 @@ class options extends Phaser.Scene {
     this.add
       .image(259, 374, "bback")
       .setInteractive()
-      .on("pointerdown", () => this.scene.start("main"));
+      .on("pointerdown", () => {
+        this.scene.start("main");
+        bbacksfx.play();
+      });
 
     this.add.image(422, 254, "bar");
     this.add.image(422, 314, "bar");

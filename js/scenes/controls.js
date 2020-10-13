@@ -11,12 +11,18 @@ class controls extends Phaser.Scene {
     this.add
       .image(102, 90, "bback")
       .setInteractive()
-      .on("pointerdown", () => this.scene.start("main"));
+      .on("pointerdown", () => {
+        this.scene.start("main");
+        bbacksfx.play();
+      });
 
     this.add
       .image(677, 514, "bhowtoplay")
       .setInteractive()
-      .on("pointerdown", () => this.scene.start("help"));
+      .on("pointerdown", () => {
+        this.scene.start("help");
+        bnextsfx.play();
+    });
   }
 }
 

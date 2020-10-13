@@ -100,42 +100,59 @@ class main extends Phaser.Scene {
     this.load.image("ivirus", "assets/images/objects/ivirus.png");
     this.load.image("icloud", "assets/images/objects/icloud.png");
     this.load.image("ipvp", "assets/images/objects/ipvp.png");
-    this.load.audio("mainmusic", "assets/music/main.mp3");
-    this.load.audio("goodiesfx", "assets/sfx/goodie.wav");
-    this.load.audio("chinstrapfx", "assets/sfx/chinstrap.wav");
+    this.load.audio("mainmsc", "assets/music/main.mp3");
+    this.load.audio('lvl1msc', 'assets/music/level1.mp3');
+    this.load.audio('lvl2msc', 'assets/music/level2.mp3');
+    this.load.audio('lvl3msc', 'assets/music/level3.mp3');
+    this.load.audio("goodsfx", "assets/sfx/good.mp3");
+    this.load.audio("vaccinesfx", "assets/sfx/vaccine.mp3");
+    this.load.audio("badsfx", "assets/sfx/bad.mp3");
+    this.load.audio('bnextsfx', 'assets/sfx/bnext.mp3');
+    this.load.audio('bbacksfx', 'assets/sfx/bback.mp3');
   }
 
   //Menú principal. Creación del menú, botones que redigirán a las distintas escenas (menú de créditos, ayuda, jugar, etc).
   create() {
+     bnextsfx = this.sound.add('bnextsfx');
+     bbacksfx = this.sound.add('bbacksfx')
     if (track == undefined) {
-      track = this.sound.add("mainmusic", { loop: true });
+      track = this.sound.add("mainmsc", { loop: true });
       track.play();
     }
     this.add.image(400, 300, "menu");
     this.add
-      .image(400, 228, "bplay")
+      .image(400, 260, "bplay").setScale(1.5)
       .setInteractive()
-      .on("pointerdown", () => this.scene.start("selector"));
+      .on("pointerdown", () => {
+        this.scene.start("selector");
+        bnextsfx.play();
+      });
     this.add
-      .image(400, 286, "bstore")
+      .image(400, 330, "boptions")
       .setInteractive()
-      .on("pointerdown", () => this.scene.start("store"));
+      .on("pointerdown", () => {
+        this.scene.start("options");
+        bnextsfx.play()
+      });
     this.add
-      .image(400, 347, "boptions")
+      .image(400, 400, "bcredits")
       .setInteractive()
-      .on("pointerdown", () => this.scene.start("options"));
-    this.add
-      .image(400, 408, "bcredits")
-      .setInteractive()
-      .on("pointerdown", () => this.scene.start("credits"));
+      .on("pointerdown", () => {
+        this.scene.start("credits");
+        bnextsfx.play();
+      });
     this.add
       .image(710, 558, "bhelp")
       .setInteractive()
-      .on("pointerdown", () => this.scene.start("help"));
+      .on("pointerdown", () => {
+        this.scene.start("help");
+        bnextsfx.play();
+      });
     this.add
       .image(90, 558, "bexit")
       .setInteractive()
       .on("pointerdown", () => {
+        bnextsfx.play();
         track.pause();
         window.location.href = "http://www.google.com";
       });
@@ -145,11 +162,15 @@ class main extends Phaser.Scene {
       .on("pointerdown", () => {
         if (this.scale.isFullscreen) {
           this.scale.stopFullscreen();
+          bbacksfx.play();
         } else {
           this.scale.startFullscreen();
+          bnextsfx.play();
         }
       });
   }
+
 }
+
 
 export default main;
