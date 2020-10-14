@@ -54,7 +54,9 @@ class help extends Phaser.Scene {
       .setInteractive()
       .on("pointerdown", () => {
         this.scene.start("main")
-        bbacksfx.play();
+        if (sfx == true) {
+          bbacksfx.play();
+        }      
       });
 
     this.add
@@ -62,8 +64,13 @@ class help extends Phaser.Scene {
       .setInteractive()
       .on("pointerdown", () => {
         this.scene.start("controls")
+        if (sfx == true) {
+          if (iobject !== undefined) {
+          iobject.destroy();
+        }
         bnextsfx.play();
-      });
+      }
+    });
   }
 
   //Creación de funciones que serán ejecutadas cuando el usuario pase el mouse por el objeto correspondiente a cada.

@@ -13,8 +13,10 @@ class credits extends Phaser.Scene {
       .setInteractive()
       .on("pointerdown", () => {
         this.scene.start("main")
-        bbacksfx.play();
-      });
+        if (sfx == true) {
+          bbacksfx.play();
+      }      
+    });
   }
 }
 
