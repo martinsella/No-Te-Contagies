@@ -71,7 +71,6 @@ class preloader extends Phaser.Scene {
     this.load.image("bpvp", "assets/images/buttons/bpvp.png");
     this.load.image("bpvplocked", "assets/images/buttons/bpvplocked.png");
     this.load.image("virus", "assets/images/objects/virus.png");
-    this.load.image("cloud", "assets/images/objects/cloud.png");
     this.load.image("bretry", "assets/images/buttons/bretry.png");
     this.load.image("bexit", "assets/images/buttons/bexit.png");
     this.load.image("bmenu", "assets/images/buttons/bmenu.png");
@@ -88,7 +87,6 @@ class preloader extends Phaser.Scene {
     this.load.image("fchinstrap", "assets/images/objects/fchinstrap.png");
     this.load.image("fmud", "assets/images/objects/fmud.png");
     this.load.image("fsoap", "assets/images/objects/fsoap.png");
-    this.load.image("fcloud", "assets/images/objects/fcloud.png");
     this.load.image("fvaccine", "assets/images/objects/fvaccine.png");
     this.load.image("fvirus", "assets/images/objects/fvirus.png");
     this.load.image("ialcohol", "assets/images/objects/ialcohol.png");
@@ -97,7 +95,6 @@ class preloader extends Phaser.Scene {
     this.load.image("isoap", "assets/images/objects/isoap.png");
     this.load.image("ivaccine", "assets/images/objects/ivaccine.png");
     this.load.image("ivirus", "assets/images/objects/ivirus.png");
-    this.load.image("icloud", "assets/images/objects/icloud.png");
     this.load.image("ipvp", "assets/images/objects/ipvp.png");
     this.load.audio("mainmsc", "assets/music/main.mp3");
     this.load.audio("lvl1msc", "assets/music/level1.mp3");

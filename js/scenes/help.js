@@ -41,11 +41,6 @@ class help extends Phaser.Scene {
       .setInteractive()
       .on("pointerover", () => this.icreate6());
 
-    this.add
-      .image(567, 426, "fcloud")
-      .setInteractive()
-      .on("pointerover", () => this.icreate7());
-
     i = 0;
 
     //Creación de botones y seteo de funciones de los mismos.
@@ -132,16 +127,6 @@ class help extends Phaser.Scene {
     } else {
       iobject.destroy();
       iobject = this.add.image(648, 345, "ivirus");
-    }
-  }
-
-  icreate7() {
-    if (i == 0) {
-      iobject = this.add.image(567, 426, "icloud");
-      i++;
-    } else {
-      iobject.destroy();
-      iobject = this.add.image(567, 426, "icloud");
     }
   }
 

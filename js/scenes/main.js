@@ -67,7 +67,7 @@ class main extends Phaser.Scene {
         }
       });
     bmsc = this.add
-      .image(708, 30, bmscText)
+      .image(707, 30, bmscText)
       .setInteractive()
       .on("pointerdown", () => {
         if (music == true) {
@@ -87,7 +87,7 @@ class main extends Phaser.Scene {
         }
       });
     bsfx = this.add
-      .image(738, 30, bsfxText)
+      .image(737, 30, bsfxText)
       .setInteractive()
       .on("pointerdown", () => {
         if (sfx == true) {

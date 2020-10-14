@@ -73,6 +73,46 @@ class gameplay extends Phaser.Scene {
           bnextsfx.play();
         }      
       });
+    bmsc = this.add
+      .image(704, 30, bmscText)
+      .setInteractive()
+      .on("pointerdown", () => {
+        if (music == true) {
+          bmsc.setTexture("bmscoff");
+          bmscText = "bmscoff";
+          bnextsfx.play();
+          lvlmsc.pause();
+          music = false;
+        } else if (music == false) {
+          bmsc.setTexture("bmscon");
+          bmscText = "bmscon";
+          bbacksfx.play();
+          if (level == 1) {
+            lvlmsc = this.sound.add('lvl1msc', { loop: true });
+            lvlmsc.play();
+          } else if (level == 2) {
+            lvlmsc = this.sound.add('lvl2msc', { loop: true });
+            lvlmsc.play();
+          }
+          music = true;
+        }
+      });
+    bsfx = this.add
+      .image(734, 30, bsfxText)
+      .setInteractive()
+      .on("pointerdown", () => {
+        if (sfx == true) {
+          bsfx.setTexture("bsfxoff");
+          bsfxText = "bsfxoff";
+          bnextsfx.play();
+          sfx = false;
+        } else if (sfx == false) {
+          bsfx.setTexture("bsfxon");
+          bsfxText = "bsfxon";
+          bbacksfx.play();
+          sfx = true;
+        }
+      });
 
     //Creamos las animaciones del personaje.
     this.anims.create({
@@ -356,8 +396,9 @@ class gameplay extends Phaser.Scene {
         vaccine = new Vaccine({ scene: this, x: pattern3, y: pattern4 });
         velVaccine();
         countvac++;
-      } else if (pattern >= 0.1 && pattern < 0.2 && level !== 1 && stopAnim == "stop") {
+      } else if (pattern >= 0.1 && pattern < 0.2 && level !== 1 && countchins < 3 && stopAnim == "stop") {
         chinstrap = new Chinstrap({ scene: this, x: pattern3, y: pattern4 });
+        countchins++;
         velChinstrap();
       } else if (pattern >= 0.2 && pattern < 0.4) {
         virus = new Virus({ scene: this, x: pattern3, y: pattern4 });
@@ -515,7 +556,7 @@ class gameplay extends Phaser.Scene {
       track.play();
     }
     timedEvent3 = this.time.addEvent({
-      delay: 10000,
+      delay: 5000,
       callback: this.endChinstrap,
       callbackScope: this,
       loop: false,
@@ -837,19 +878,6 @@ class gameplay extends Phaser.Scene {
         }
       });
 
-    fcloud = this.add
-      .image(567, 426, "fcloud")
-      .setInteractive()
-      .on(type, () => {
-        if (i == 0) {
-          iobject = this.add.image(567, 426, "icloud");
-          i++;
-        } else {
-          iobject.destroy();
-          iobject = this.add.image(567, 426, "icloud");
-        }
-      });
-
     i = 0;
 
     //Creación de botones y seteo de funciones de los mismos.
@@ -888,7 +916,6 @@ class gameplay extends Phaser.Scene {
     fchinstrap.destroy();
     fmud.destroy();
     fvirus.destroy();
-    fcloud.destroy();
     button.destroy();
     button2.destroy();
     button3.destroy();
@@ -903,7 +930,6 @@ class gameplay extends Phaser.Scene {
     fchinstrap.destroy();
     fmud.destroy();
     fvirus.destroy();
-    fcloud.destroy();
     button.destroy();
     button2.destroy();
     button3.destroy();
