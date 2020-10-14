@@ -111,15 +111,6 @@ class gameplay extends Phaser.Scene {
       framerate: 10,
       repeat: 0,
     });
-    this.anims.create({
-      key: "victory",
-      frames: this.anims.generateFrameNumbers("player3", {
-        start: 0,
-        end: 2,
-      }),
-      framerate: 10,
-      repeat: -1,
-    });
 
     if (level >= 2) {
       this.anims.create({
@@ -604,7 +595,7 @@ class gameplay extends Phaser.Scene {
     progressBar.fillRect(19, 19, 200, 19);
     this.physics.pause();
     timedEvent.paused = true;
-    player.anims.play("victory");
+    player.anims.play(stopAnim);
     
     if (level == 1) {
       ball.anims.play("stopBall", true);
