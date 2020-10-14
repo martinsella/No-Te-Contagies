@@ -433,12 +433,14 @@ class gameplay extends Phaser.Scene {
 
   update() {
     if (lives <= 0) {
+      countchins = 0;
       if (music == true) {
         lvlmsc.stop();
       }
       this.gameover();
     }
     if (score >= 200) {
+      countchins = 0;
       if (music == true) {
         lvlmsc.stop();
       }
