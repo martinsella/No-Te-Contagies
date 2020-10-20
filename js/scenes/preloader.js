@@ -7,11 +7,8 @@ class preloader extends Phaser.Scene {
 
   //Realizamos la precarga de assets (imágenes, spritesheets, etc) definiendo un nombre a cada uno, seguido de la ruta donde este se encuentra.
   preload() {
+    //carga de escenas.
     this.load.image("lenguage", "assets/images/menus/lenguage.png");
-    this.load.image("bspanish", "assets/images/buttons/bspanish.png");
-    this.load.image("benglish", "assets/images/buttons/benglish.png");
-    this.load.image("bportuguese", "assets/images/buttons/bportuguese.png");
-    this.load.audio("bnextsfx", "assets/sfx/bnext.mp3");
     this.load.image("menu", "assets/images/menus/menu.png");
     this.load.image("help", "assets/images/menus/help.png");
     this.load.image("help2", "assets/images/menus/help2.png");
@@ -20,13 +17,16 @@ class preloader extends Phaser.Scene {
     this.load.image("controls2", "assets/images/menus/controls2.png");
     this.load.image("background", "assets/images/backgrounds/background.png");
     this.load.image("background2", "assets/images/backgrounds/background2.png");
+    this.load.image("background3", "assets/images/backgrounds/background3.png");
     this.load.image("overcome", "assets/images/menus/overcome.png");
     this.load.image("lost", "assets/images/menus/lost.png");
+    this.load.image("credits", "assets/images/menus/credits.png");
+    this.load.image("pause", "assets/images/menus/pause.png");
+
+    //carga de objetos.
     this.load.image("tree", "assets/images/objects/tree.png");
     this.load.image("tree2", "assets/images/objects/tree2.png");
     this.load.image("font", "assets/images/objects/font.png");
-    this.load.image("credits", "assets/images/menus/credits.png");
-    this.load.image("pause", "assets/images/menus/pause.png");
     this.load.spritesheet("player", "assets/images/objects/player.png", {
       //Indicamos el alto y ancho (en píxeles) de cada frame que compone el spritesheet.
       frameHeight: 491,
@@ -42,6 +42,48 @@ class preloader extends Phaser.Scene {
       frameHeight: 25,
       frameWidth: 25,
     });
+    this.load.spritesheet("paper", "assets/images/objects/paper.png", {
+      //Indicamos el alto y ancho (en píxeles) de cada frame que compone el spritesheet.
+      frameHeight: 38,
+      frameWidth: 39,
+    });
+    this.load.image("virus", "assets/images/objects/virus.png");
+    this.load.image("collider", "assets/images/objects/collider.png");
+    this.load.image("collider2", "assets/images/objects/collider2.png");
+    this.load.image("mud", "assets/images/objects/mud.png");
+    this.load.image("syringe", "assets/images/objects/syringe.png");
+    this.load.image("soap", "assets/images/objects/soap.png");
+    this.load.image("alcohol", "assets/images/objects/alcohol.png");
+    this.load.image("chinstrap", "assets/images/objects/chinstrap.png");
+    this.load.image("heart", "assets/images/objects/heart.png");
+    this.load.image("falcohol", "assets/images/objects/falcohol.png");
+    this.load.image("fchinstrap", "assets/images/objects/fchinstrap.png");
+    this.load.image("fmud", "assets/images/objects/fmud.png");
+    this.load.image("fsoap", "assets/images/objects/fsoap.png");
+    this.load.image("fvaccine", "assets/images/objects/fvaccine.png");
+    this.load.image("fvirus", "assets/images/objects/fvirus.png");
+    this.load.image("ialcohol", "assets/images/objects/ialcohol.png");
+    this.load.image("ichinstrap", "assets/images/objects/ichinstrap.png");
+    this.load.image("imud", "assets/images/objects/imud.png");
+    this.load.image("isoap", "assets/images/objects/isoap.png");
+    this.load.image("ivaccine", "assets/images/objects/ivaccine.png");
+    this.load.image("ivirus", "assets/images/objects/ivirus.png");
+    this.load.image("ipvp", "assets/images/objects/ipvp.png");
+    this.load.image("bench", "assets/images/objects/bench.png");
+    this.load.image("bench2", "assets/images/objects/bench2.png");
+    this.load.image("bench3", "assets/images/objects/bench3.png");
+    this.load.image("bench4", "assets/images/objects/bench4.png");
+    this.load.image("bench5", "assets/images/objects/bench5.png");
+    this.load.image("bench6", "assets/images/objects/bench6.png");
+    this.load.image("bench7", "assets/images/objects/bench7.png");
+    this.load.image("bench8", "assets/images/objects/bench8.png");
+    this.load.image("bench9", "assets/images/objects/bench9.png");
+
+    //carga de botones.
+    this.load.image("bspanish", "assets/images/buttons/bspanish.png");
+    this.load.image("benglish", "assets/images/buttons/benglish.png");
+    this.load.image("bportuguese", "assets/images/buttons/bportuguese.png");
+    this.load.audio("bnextsfx", "assets/sfx/bnext.mp3");
     this.load.image("b1", "assets/images/buttons/b1.png");
     this.load.image("b2", "assets/images/buttons/b2.png");
     this.load.image("b3", "assets/images/buttons/b3.png");
@@ -70,32 +112,12 @@ class preloader extends Phaser.Scene {
     this.load.image("blocked", "assets/images/buttons/blocked.png");
     this.load.image("bpvp", "assets/images/buttons/bpvp.png");
     this.load.image("bpvplocked", "assets/images/buttons/bpvplocked.png");
-    this.load.image("virus", "assets/images/objects/virus.png");
     this.load.image("bretry", "assets/images/buttons/bretry.png");
     this.load.image("bexit", "assets/images/buttons/bexit.png");
     this.load.image("bmenu", "assets/images/buttons/bmenu.png");
     this.load.image("bhowtoplay", "assets/images/buttons/bhowtoplay.png");
-    this.load.image("collider", "assets/images/objects/collider.png");
-    this.load.image("collider2", "assets/images/objects/collider2.png");
-    this.load.image("mud", "assets/images/objects/mud.png");
-    this.load.image("syringe", "assets/images/objects/syringe.png");
-    this.load.image("soap", "assets/images/objects/soap.png");
-    this.load.image("alcohol", "assets/images/objects/alcohol.png");
-    this.load.image("chinstrap", "assets/images/objects/chinstrap.png");
-    this.load.image("heart", "assets/images/objects/heart.png");
-    this.load.image("falcohol", "assets/images/objects/falcohol.png");
-    this.load.image("fchinstrap", "assets/images/objects/fchinstrap.png");
-    this.load.image("fmud", "assets/images/objects/fmud.png");
-    this.load.image("fsoap", "assets/images/objects/fsoap.png");
-    this.load.image("fvaccine", "assets/images/objects/fvaccine.png");
-    this.load.image("fvirus", "assets/images/objects/fvirus.png");
-    this.load.image("ialcohol", "assets/images/objects/ialcohol.png");
-    this.load.image("ichinstrap", "assets/images/objects/ichinstrap.png");
-    this.load.image("imud", "assets/images/objects/imud.png");
-    this.load.image("isoap", "assets/images/objects/isoap.png");
-    this.load.image("ivaccine", "assets/images/objects/ivaccine.png");
-    this.load.image("ivirus", "assets/images/objects/ivirus.png");
-    this.load.image("ipvp", "assets/images/objects/ipvp.png");
+
+    //carga de audio.
     this.load.audio("mainmsc", "assets/music/main.mp3");
     this.load.audio("lvl1msc", "assets/music/level1.mp3");
     this.load.audio("lvl2msc", "assets/music/level2.mp3");

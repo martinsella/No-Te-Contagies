@@ -79,7 +79,6 @@ class selector extends Phaser.Scene {
       if (track !== undefined) {
         track.pause();
       }
-      this.scene.start("gameplay");
       this.add
         .image(465, 284, "blevel3")
         .setInteractive()
@@ -95,8 +94,7 @@ class selector extends Phaser.Scene {
           }
           this.scene.start("gameplay");
         });
-    } else {
-      this.add.image(603, 284, "bpvp");
+    } else if (levOver == 3) {
       this.add
         .image(328, 284, "blevel2")
         .setInteractive()
@@ -111,7 +109,6 @@ class selector extends Phaser.Scene {
       if (track !== undefined) {
         track.pause();
       }
-      this.scene.start("gameplay");
       this.add
         .image(465, 284, "blevel3")
         .setInteractive()
@@ -124,6 +121,7 @@ class selector extends Phaser.Scene {
           }
           this.scene.start("gameplay");
         });
+        this.add.image(603, 284, "bpvp");
     }
   }
 }

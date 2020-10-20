@@ -1,6 +1,8 @@
 import Player from "../classes/player.js";
-import Ball from "../classes/ball.js";
 import Collider from "../classes/collider.js";
+import Ball from "../classes/ball.js";
+import Paper from "../classes/paper.js";
+import Bench from "../classes/bench.js";
 import Mud from "../classes/mud.js";
 import {velMud} from "../classes/mud.js";
 import Virus from "../classes/virus.js";
@@ -58,10 +60,62 @@ class gameplay extends Phaser.Scene {
     } else if (level == 2) {
       this.add.image(400, 300, "background2");
       player = new Player({ scene: this, x: 400, y: 150, texture: "player" });
+      trees = this.physics.add.staticGroup();
+      trees
+        .create(650, 150, "tree")
+        .setImmovable(true)
+        .setSize(40, 40)
+        .setOrigin(0.59, 0.4);
+      trees
+        .create(180, 420, "tree2")
+        .setImmovable(true)
+        .setSize(45, 45)
+        .setOrigin(0.57, 0.43);
+      font = this.physics.add.staticGroup();
+      font.create(400, 300, "font").setImmovable(true).setSize(145, 140);
+      this.physics.add.collider(player, trees);
+      this.physics.add.collider(player, font);
       if (music == true) {
       lvlmsc = this.sound.add('lvl2msc', { loop: true });
       lvlmsc.play();
       }
+    } else if (level == 3) {
+        this.add.image(400, 300, "background3");
+        player = new Player({ scene: this, x: 400, y: 222, texture: "player" });
+        if (music == true) {
+          lvlmsc = this.sound.add('lvl3msc', { loop: true });
+          lvlmsc.play();
+        }
+        bench = [
+          new Bench({scene: this, x: 175, y: 135, texture: "bench"}),
+          new Bench({scene: this, x: 400, y: 135, texture: "bench2"}),
+          new Bench({scene: this, x: 627, y: 135, texture: "bench3"}),
+          new Bench({scene: this, x: 175, y: 310, texture: "bench4"}),
+          new Bench({scene: this, x: 400, y: 310, texture: "bench5"}),
+          new Bench({scene: this, x: 627, y: 310, texture: "bench6"}),
+          new Bench({scene: this, x: 175, y: 490, texture: "bench7"}),
+          new Bench({scene: this, x: 400, y: 490, texture: "bench8"}),
+          new Bench({scene: this, x: 627, y: 490, texture: "bench9"})
+        ]
+        this.anims.create({
+          key: "playPaper",
+          frames: this.anims.generateFrameNumbers("paper", {
+            start: 0,
+            end: 7,
+          }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "stopPaper",
+          frames: [{ key: "paper", frame: 0 }],
+          framerate: 10,
+          repeat: 0,
+        });
+        paper = new Paper({ scene: this, x: 280, y: 350, texture: "paper" });
+        this.physics.add.collider(player, paper, () => {paper.anims.play("playPaper")}, null, this);
+        this.physics.add.collider(player, bench);
+        this.physics.add.collider(paper, bench);
     }
 
     bpause = this.add
@@ -204,24 +258,6 @@ class gameplay extends Phaser.Scene {
       new Collider({scene: this, x: 400, y: -60, texture: "collider2"}),
       new Collider({scene: this, x: 400, y: 660, texture: "collider2"})
     ]
-
-    if (level == 2) {
-      trees = this.physics.add.staticGroup();
-      trees
-        .create(650, 150, "tree")
-        .setImmovable(true)
-        .setSize(40, 40)
-        .setOrigin(0.59, 0.4);
-      trees
-        .create(180, 420, "tree2")
-        .setImmovable(true)
-        .setSize(45, 45)
-        .setOrigin(0.57, 0.43);
-      font = this.physics.add.staticGroup();
-      font.create(400, 300, "font").setImmovable(true).setSize(145, 140);
-      this.physics.add.collider(player, trees);
-      this.physics.add.collider(player, font);
-    }
 
     //creacion de los controles.
     if (isMobile.any())
@@ -433,17 +469,23 @@ class gameplay extends Phaser.Scene {
 
   update() {
     if (lives <= 0) {
+      bpause.destroy();
       countchins = 0;
       if (music == true) {
         lvlmsc.stop();
       }
+      lives = 3;
+      score = 0;
       this.gameover();
     }
     if (score >= 200) {
+      bpause.destroy();
       countchins = 0;
       if (music == true) {
         lvlmsc.stop();
       }
+      lives = 3;
+      score = 0;
       this.lvlfinish();
     }
   }
@@ -651,45 +693,67 @@ class gameplay extends Phaser.Scene {
 
     this.add.image(400, 300, "overcome");
 
-    this.add
-      .image(400, 315, "bcontinue")
-      .setScale(1.2)
-      .setInteractive()
-      .on("pointerdown", () => {
-        this.continue()
-        if (sfx == true) {
-          bnextsfx.play();
-        }  
-      });
-
-    this.add
-      .image(290, 390, "bretry")
-      .setInteractive()
-      .on("pointerdown", () => {
-        this.restart()
-        if (sfx == true) {
-          bnextsfx.play();
-        }  
-      });
-
-    this.add
-      .image(510, 390, "bmenu")
-      .setInteractive()
-      .on("pointerdown", () => {
-        this.exit()
-        lvlmsc.stop()
-        if (sfx == true) {
-          bbacksfx.play();
-        }
-      });
+    if (level < 3) {
+      this.add
+        .image(400, 315, "bcontinue")
+        .setScale(1.2)
+        .setInteractive()
+        .on("pointerdown", () => {
+          this.continue()
+          if (sfx == true) {
+            bnextsfx.play();
+          }  
+        });
+      this.add
+        .image(290, 390, "bretry")
+        .setInteractive()
+        .on("pointerdown", () => {
+          this.restart()
+          if (sfx == true) {
+            bnextsfx.play();
+          }  
+        });
+  
+      this.add
+        .image(510, 390, "bmenu")
+        .setInteractive()
+        .on("pointerdown", () => {
+          this.exit()
+          lvlmsc.stop()
+          if (sfx == true) {
+            bbacksfx.play();
+          }
+        });
+    } else {
+      this.add
+        .image(325, 315, "bretry")
+        .setInteractive()
+        .on("pointerdown", () => {
+          this.restart()
+          if (sfx == true) {
+            bnextsfx.play();
+          }  
+        });
+  
+      this.add
+        .image(475, 315, "bmenu")
+        .setInteractive()
+        .on("pointerdown", () => {
+          this.exit()
+          lvlmsc.stop()
+          if (sfx == true) {
+            bbacksfx.play();
+          }
+        });
+    }
   }
 
   //Si se elige "reintentar nivel" se ejecuta esta función.
   continue() {
-    lives = 3;
-    score = 0;
-    if (level == 1) {
+    if (level <= 2 && levOver <= 1) {
       level++;
+      levOver++;
+    } else if (level == 3) {
       levOver++;
     }
     if (level !== 1 && stopAnim == "stop2") {
@@ -704,16 +768,12 @@ class gameplay extends Phaser.Scene {
     if (level !== 1 && stopAnim == "stop2") {
       stopAnim = "stop";
     }
-    lives = 3;
-    score = 0;
   }
 
   //Si se elige "salir al menu principal" se ejeucta esta función.
   exit() {
     this.scene.start("main");
     timedEvent.paused = false;
-    lives = 3;
-    score = 0;
     if (level !== 1 && stopAnim == "stop2") {
       upAnim = "up";
       downAnim = "down";
