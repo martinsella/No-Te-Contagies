@@ -481,6 +481,10 @@ class gameplay extends Phaser.Scene {
       if (music == true) {
         lvlmsc.stop();
       }
+      if (levOver <= 2 && i !== 1) {
+        levOver++;
+        i = 1;
+      }
       lives = 3;
       score = 0;
       cursors = undefined;
@@ -495,6 +499,10 @@ class gameplay extends Phaser.Scene {
       }
       if (music == true) {
         lvlmsc.stop();
+      }
+      if (levOver <= 2 && i !== 1) {
+        levOver++;
+        i = 1;
       }
       lives = 3;
       score = 0;
@@ -656,6 +664,7 @@ class gameplay extends Phaser.Scene {
     if (level == 1) {
       ball.anims.play("stopBall", true);
     } else if (level !== 1 && stopAnim == "stop2") {
+      timedEvent3.paused = true;
       upAnim = "up";
       downAnim = "down";
       rightAnim = "right";
@@ -698,6 +707,7 @@ class gameplay extends Phaser.Scene {
     if (level == 1) {
       ball.anims.play("stopBall", true);
     } else if (level !== 1 && stopAnim == "stop2") {
+      timedEvent3.paused = true;
       upAnim = "up";
       downAnim = "down";
       rightAnim = "right";
@@ -772,8 +782,7 @@ class gameplay extends Phaser.Scene {
       level++;
     }
     if (levOver <= 2 && i !== 1) {
-      levOver++;
-      i = 1;
+      i = 0;
     }
     this.scene.start("gameplay");
   }
@@ -783,10 +792,6 @@ class gameplay extends Phaser.Scene {
     timedEvent.paused = false;
     if (level !== 1 && stopAnim == "stop2") {
       stopAnim = "stop";
-    }
-    if (levOver <= 2 && i !== 1) {
-      levOver++;
-      i = 1;
     }
   }
 
@@ -806,10 +811,6 @@ class gameplay extends Phaser.Scene {
       leftAnim = "left";
       stopAnim = "stop";
     }
-    if (levOver <= 2 && i !== 1) {
-      levOver++;
-      i = 1;
-    }
     track = undefined;
     this.scene.start("main");
   }
@@ -824,6 +825,9 @@ class gameplay extends Phaser.Scene {
       ball.anims.play("stopBall", true);
     } else if (level == 3) {
       paper.anims.play("stopPaper", true);
+    }
+    if (level !== 1 && stopAnim == "stop2") {
+      timedEvent3.paused = true;
     }
     menu = this.add.image(400, 300, "pause");
 
@@ -867,6 +871,12 @@ class gameplay extends Phaser.Scene {
 
     if (level == 1) {
       ball.anims.play("playBall", true);
+    }
+    if (level == 3) {
+      paper.anims.play("playPaper", true);
+    }
+    if (level !== 1 && stopAnim == "stop2") {
+      timedEvent3.paused = false;
     }
     this.physics.resume();
     cursors = this.input.keyboard.createCursorKeys()
