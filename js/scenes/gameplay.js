@@ -147,6 +147,9 @@ class gameplay extends Phaser.Scene {
           } else if (level == 2) {
             lvlmsc = this.sound.add('lvl2msc', { loop: true });
             lvlmsc.play();
+          } else if (level == 3) {
+            lvlmsc = this.sound.add('lvl3msc', { loop: true });
+            lvlmsc.play();
           }
           music = true;
         }
@@ -470,22 +473,32 @@ class gameplay extends Phaser.Scene {
   update() {
     if (lives <= 0) {
       bpause.destroy();
-      countchins = 0;
+      bmsc.destroy();
+      bsfx.destroy();
+      if (level !== 1) {
+        countchins = 0;
+      }
       if (music == true) {
         lvlmsc.stop();
       }
       lives = 3;
       score = 0;
+      cursors = undefined;
       this.gameover();
     }
     if (score >= 200) {
       bpause.destroy();
-      countchins = 0;
+      bmsc.destroy();
+      bsfx.destroy();
+      if (level !== 1) {
+        countchins = 0;
+      }
       if (music == true) {
         lvlmsc.stop();
       }
       lives = 3;
       score = 0;
+      cursors = undefined;
       this.lvlfinish();
     }
   }
@@ -690,10 +703,12 @@ class gameplay extends Phaser.Scene {
       rightAnim = "right";
       leftAnim = "left";
     }
-
+    if (level == 3) {
+      paper.anims.play("stopPaper", true);
+    }
     this.add.image(400, 300, "overcome");
 
-    if (level < 3) {
+    if (levOver <= 2) {
       this.add
         .image(400, 315, "bcontinue")
         .setScale(1.2)
@@ -750,14 +765,15 @@ class gameplay extends Phaser.Scene {
 
   //Si se elige "reintentar nivel" se ejecuta esta función.
   continue() {
-    if (level <= 2 && levOver <= 1) {
-      level++;
-      levOver++;
-    } else if (level == 3) {
-      levOver++;
-    }
     if (level !== 1 && stopAnim == "stop2") {
       stopAnim = "stop";
+    }
+    if (level <= 2) {
+      level++;
+    }
+    if (levOver <= 2 && i !== 1) {
+      levOver++;
+      i = 1;
     }
     this.scene.start("gameplay");
   }
@@ -768,11 +784,20 @@ class gameplay extends Phaser.Scene {
     if (level !== 1 && stopAnim == "stop2") {
       stopAnim = "stop";
     }
+    if (levOver <= 2 && i !== 1) {
+      levOver++;
+      i = 1;
+    }
   }
 
   //Si se elige "salir al menu principal" se ejeucta esta función.
   exit() {
-    this.scene.start("main");
+    if (lives !== 3) {
+      lives = 3;
+    }
+    if (score !== 0) {
+      score = 0;
+    }
     timedEvent.paused = false;
     if (level !== 1 && stopAnim == "stop2") {
       upAnim = "up";
@@ -781,16 +806,24 @@ class gameplay extends Phaser.Scene {
       leftAnim = "left";
       stopAnim = "stop";
     }
+    if (levOver <= 2 && i !== 1) {
+      levOver++;
+      i = 1;
+    }
     track = undefined;
+    this.scene.start("main");
   }
 
   pause() {
     timedEvent.paused = true;
     bpause.destroy();
     this.physics.pause();
+    cursors = undefined;
     player.anims.play(stopAnim);
     if (level == 1) {
       ball.anims.play("stopBall", true);
+    } else if (level == 3) {
+      paper.anims.play("stopPaper", true);
     }
     menu = this.add.image(400, 300, "pause");
 
@@ -836,6 +869,7 @@ class gameplay extends Phaser.Scene {
       ball.anims.play("playBall", true);
     }
     this.physics.resume();
+    cursors = this.input.keyboard.createCursorKeys()
     timedEvent.paused = false;
     bpause = this.add
       .image(770, 30, "bpause")
@@ -857,8 +891,9 @@ class gameplay extends Phaser.Scene {
       .image(400, 300, "help2")
       .setInteractive()
       .on(type, () => {
-        iobject.destroy();
-        i--;
+        if (iobject !== undefined) {
+          iobject.destroy();
+        }
       });
 
     //Implementamos los objetos que darán información al jugador al momento de pasar el mouse por ellos.

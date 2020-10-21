@@ -8,7 +8,11 @@ class help extends Phaser.Scene {
     this.add
       .image(400, 300, "help")
       .setInteractive()
-      .on("pointerover", () => this.iErrase());
+      .on("pointerover", () => {
+        if (iobject !== undefined) {
+          this.iErrase()
+        }
+      });
 
     //Implementamos los objetos que darán información al jugador al momento de pasar el mouse por ellos.
     this.add
