@@ -71,7 +71,7 @@ export function playKid() {
 }
 
 export function stopKid() {
-    kid.anims.play("stopKid");
+    kid.anims.play(stopAnim2);
 }
 
 export default Kid;

@@ -470,10 +470,14 @@ class gameplay extends Phaser.Scene {
 
   objects() {
     //Randomización del respawn de objetos.
-    if (level == 1) {
+    if (level == 1 && countvac == 0) {
       pattern = Phaser.Math.FloatBetween(0, 0.7);
-    } else if (level == 2) {
+    } else if (level == 1 && countvac > 0) {
+      pattern = Phaser.Math.FloatBetween(0.1, 0.7);
+    } else if (level == 2 && countvac == 0) {
       pattern = Phaser.Math.FloatBetween(0, 1.1);
+    } else if (level == 2 && countvac > 0) {
+      pattern = Phaser.Math.FloatBetween(0.1, 1.1);
     } else {
       if (countKid == 0) {
         pattern = Phaser.Math.FloatBetween(0, 2);
@@ -503,6 +507,7 @@ class gameplay extends Phaser.Scene {
     //Respawn de objetos.
       if (pattern < 0.1 && countvac == 0) {
         vaccine = new Vaccine({ scene: this, x: pattern3, y: pattern4 });
+        countvac++;
         velVaccine();
       } else if (pattern >= 0.1 && pattern < 0.4) {
         virus = new Virus({ scene: this, x: pattern3, y: pattern4 });
@@ -556,10 +561,6 @@ class gameplay extends Phaser.Scene {
       }
       if (music == true) {
         lvlmsc.stop();
-      }
-      if (levOver <= 2 && i !== 1) {
-        levOver++;
-        i = 1;
       }
       lives = 3;
       score = 0;
@@ -635,13 +636,17 @@ class gameplay extends Phaser.Scene {
 
   kidHit(player, kid) {
     kid.destroy();
-    lives--;
     countKid--;
     if (sfx == true) {
       badsfx = this.sound.add('badsfx', { loop: false });
       badsfx.play();
     }
-    this.loseLive();
+    if (stopAnim == "stop2") {
+      this.endChinstrap();
+    } else {
+      lives--;
+      this.loseLive();
+    }
   }
 
   loseLive() {
@@ -740,6 +745,7 @@ class gameplay extends Phaser.Scene {
   }
   vaccineErrase(collider, vaccine) {
     vaccine.destroy();
+    countvac--;
   }
   chinstrapErrase(collider, chinstrap) {
     chinstrap.destroy();
@@ -769,6 +775,7 @@ class gameplay extends Phaser.Scene {
     }
     if (countKid !== 0) {
       stopKid();
+      countkid--;
     }
 
     this.add.image(400, 300, "lost");
@@ -788,7 +795,9 @@ class gameplay extends Phaser.Scene {
       .setInteractive()
       .on("pointerdown", () => {
         this.exit()
-        lvlmsc.stop();
+        if (music == true) {
+          lvlmsc.stop();
+        } 
         if (sfx == true) {
           bnextsfx.play();
         }  
@@ -818,6 +827,7 @@ class gameplay extends Phaser.Scene {
     }
     if (countKid !== 0) {
       stopKid();
+      countKid--;
     }
     this.add.image(400, 300, "overcome");
 
@@ -847,7 +857,9 @@ class gameplay extends Phaser.Scene {
         .setInteractive()
         .on("pointerdown", () => {
           this.exit()
-          lvlmsc.stop()
+          if (music == true) {
+            lvlmsc.stop();
+          } 
           if (sfx == true) {
             bbacksfx.play();
           }
@@ -868,7 +880,9 @@ class gameplay extends Phaser.Scene {
         .setInteractive()
         .on("pointerdown", () => {
           this.exit()
-          lvlmsc.stop()
+          if (music == true) {
+            lvlmsc.stop();
+          }
           if (sfx == true) {
             bbacksfx.play();
           }
@@ -884,7 +898,7 @@ class gameplay extends Phaser.Scene {
     if (level <= 2) {
       level++;
     }
-    if (levOver <= 2 && i !== 1) {
+    if (levOver <= 2 && i !== 0) {
       i = 0;
     }
     this.scene.start("gameplay");
@@ -961,11 +975,13 @@ class gameplay extends Phaser.Scene {
       .image(465, 355, "bmenu")
       .setInteractive()
       .on("pointerdown", () => {
+        if (music == true) {
+          lvlmsc.stop();
+        }
         if (sfx == true) {
           bbacksfx.play();
         }
         this.exit()
-        lvlmsc.stop()
       });
   }
 
