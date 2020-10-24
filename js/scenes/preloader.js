@@ -37,6 +37,16 @@ class preloader extends Phaser.Scene {
       frameHeight: 491,
       frameWidth: 93,
     });
+    this.load.spritesheet("kid", "assets/images/objects/kid.png", {
+      //Indicamos el alto y ancho (en píxeles) de cada frame que compone el spritesheet.
+      frameHeight: 491,
+      frameWidth: 93,
+    });
+    this.load.spritesheet("kid2", "assets/images/objects/kid2.png", {
+      //Indicamos el alto y ancho (en píxeles) de cada frame que compone el spritesheet.
+      frameHeight: 491,
+      frameWidth: 93,
+    });
     this.load.spritesheet("ball", "assets/images/objects/ball.png", {
       //Indicamos el alto y ancho (en píxeles) de cada frame que compone el spritesheet.
       frameHeight: 25,

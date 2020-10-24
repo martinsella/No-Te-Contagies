@@ -1,4 +1,5 @@
 import Player from "../classes/player.js";
+import Kid, { playKid, posKid, stopKid, velKid } from "../classes/kid.js";
 import Collider from "../classes/collider.js";
 import Ball from "../classes/ball.js";
 import Paper from "../classes/paper.js";
@@ -97,6 +98,78 @@ class gameplay extends Phaser.Scene {
           new Bench({scene: this, x: 400, y: 490, texture: "bench8"}),
           new Bench({scene: this, x: 627, y: 490, texture: "bench9"})
         ]
+        this.anims.create({
+          key: "upKid", //Definimos nombre a la animación.
+          frames: this.anims.generateFrameNumbers("kid", { start: 0, end: 4 }), //definimos los frames que abarca.
+          framerate: 10, //velocidad de frames/frames por segundo.
+          repeat: -1, //cuantas veces se repite (0 = infinitamente).
+        });
+        this.anims.create({
+          key: "downKid",
+          frames: this.anims.generateFrameNumbers("kid", { start: 5, end: 9 }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "rightKid",
+          frames: this.anims.generateFrameNumbers("kid", {
+            start: 10,
+            end: 15,
+          }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "leftKid",
+          frames: this.anims.generateFrameNumbers("kid", {
+            start: 16,
+            end: 21,
+          }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "stopKid",
+          frames: [{ key: "kid", frame: 5 }],
+          framerate: 10,
+          repeat: 0,
+        });
+        this.anims.create({
+          key: "upKid2", //Definimos nombre a la animación.
+          frames: this.anims.generateFrameNumbers("kid2", { start: 0, end: 4 }), //definimos los frames que abarca.
+          framerate: 10, //velocidad de frames/frames por segundo.
+          repeat: -1, //cuantas veces se repite (0 = infinitamente).
+        });
+        this.anims.create({
+          key: "downKid2",
+          frames: this.anims.generateFrameNumbers("kid2", { start: 5, end: 9 }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "rightKid2",
+          frames: this.anims.generateFrameNumbers("kid2", {
+            start: 10,
+            end: 15,
+          }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "leftKid2",
+          frames: this.anims.generateFrameNumbers("kid2", {
+            start: 16,
+            end: 21,
+          }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "stopKid2",
+          frames: [{ key: "kid2", frame: 5 }],
+          framerate: 10,
+          repeat: 0,
+        });
         this.anims.create({
           key: "playPaper",
           frames: this.anims.generateFrameNumbers("paper", {
@@ -397,20 +470,30 @@ class gameplay extends Phaser.Scene {
 
   objects() {
     //Randomización del respawn de objetos.
-    pattern = Phaser.Math.FloatBetween(0, 1);
+    if (level == 1) {
+      pattern = Phaser.Math.FloatBetween(0, 0.7);
+    } else if (level == 2) {
+      pattern = Phaser.Math.FloatBetween(0, 1.1);
+    } else {
+      if (countKid == 0) {
+        pattern = Phaser.Math.FloatBetween(0, 2);
+      } else {
+        pattern = Phaser.Math.FloatBetween(0, 1.4);
+      }
+    }
     pattern2 = Phaser.Math.Between(0, 3);
     if (pattern2 == 0) {
-      pattern3 = Phaser.Math.Between(1, 799);
+      pattern3 = Phaser.Math.Between(20, 780);
       pattern4 = 0;
     } else if (pattern2 == 1) {
-      pattern3 = Phaser.Math.Between(1, 799);
+      pattern3 = Phaser.Math.Between(20, 780);
       pattern4 = 600;
     } else if (pattern2 == 2) {
       pattern3 = 0;
-      pattern4 = Phaser.Math.Between(1, 599);
+      pattern4 = Phaser.Math.Between(20, 580);
     } else if (pattern2 == 3) {
       pattern3 = 800;
-      pattern4 = Phaser.Math.Between(1, 599);
+      pattern4 = Phaser.Math.Between(20, 580);
     }
     if (pattern3 == 0 || pattern4 == 0) {
       velObj = 200;
@@ -418,41 +501,30 @@ class gameplay extends Phaser.Scene {
       velObj = -200;
     }
     //Respawn de objetos.
-    if (level == 1) {
       if (pattern < 0.1 && countvac == 0) {
         vaccine = new Vaccine({ scene: this, x: pattern3, y: pattern4 });
         velVaccine();
-        countvac++;
-      } else if (pattern >= 0.1 && pattern < 0.55) {
-        soap = new Soap({ scene: this, x: pattern3, y: pattern4 });
-        velSoap();
-      } else if (pattern >= 0.55 && pattern < 1) {
+      } else if (pattern >= 0.1 && pattern < 0.4) {
         virus = new Virus({ scene: this, x: pattern3, y: pattern4 });
         velVirus();
-      }
-    } else if (level > 1) {
-      if (pattern < 0.1 && countvac == 0) {
-        vaccine = new Vaccine({ scene: this, x: pattern3, y: pattern4 });
-        velVaccine();
-        countvac++;
-      } else if (pattern >= 0.1 && pattern < 0.2 && level !== 1 && countchins < 3 && stopAnim == "stop") {
+      } else if (pattern >= 0.4 && pattern < 0.7) {
+        soap = new Soap({ scene: this, x: pattern3, y: pattern4 });
+        velSoap();
+      } else if (pattern >= 0.7 && pattern < 0.8 && countchins < 3 && stopAnim == "stop") {
         chinstrap = new Chinstrap({ scene: this, x: pattern3, y: pattern4 });
-        countchins++;
         velChinstrap();
-      } else if (pattern >= 0.2 && pattern < 0.4) {
-        virus = new Virus({ scene: this, x: pattern3, y: pattern4 });
-        velVirus();
-      } else if (pattern >= 0.4 && pattern < 0.6) {
-        soap = new Soap({ scene: this, x: pattern3, y: pattern4 });
-        velSoap();
-      } else if (pattern >= 0.6 && pattern < 0.8 && level > 1) {
+      } else if (pattern >= 0.8 && pattern < 1.1) {
         mud = new Mud({ scene: this, x: pattern3, y: pattern4 });
         velMud();
-      } else if (pattern >= 0.8 && pattern < 1 && level == 3) {
-          alcohol = new Alcohol({ scene: this, x: pattern3, y: pattern4 });
-          velAlcohol();
+      } else if (pattern >= 1.1 && pattern < 1.4) {
+        alcohol = new Alcohol({ scene: this, x: pattern3, y: pattern4 });
+        velAlcohol();
+      } else if (pattern >= 1.4 && countKid == 0) {
+        posKid();
+        kid = new Kid({ scene: this, x: pattern3, y: pattern4, texture: whatKid });
+        countKid++;
+        velKid();
       }
-    }
 
     //creacion de colliders.
     this.physics.add.overlap(player, mud, this.mudHit, null, this); //collider que ejecuta una función al agarrar un barro.
@@ -467,7 +539,11 @@ class gameplay extends Phaser.Scene {
     this.physics.add.collider(collider, alcohol, this.alcoholErrase, null, this); //collider que ejecuta una función cuando un alcohol choca con un collider.
     this.physics.add.collider(collider, vaccine, this.vaccineErrase, null, this); //collider que ejecuta una función cuando una vacuna choca con un collider.
     this.physics.add.collider(collider, chinstrap, this.chinstrapErrase, null, this); //collider que ejecuta una función cuando un barbijo choca con un collider.
-
+    this.physics.add.collider(collider, kid, this.kidErrase, null, this); //collider que ejecuta una función cuando un chico choca con un collider.
+    if (level > 2) {
+    this.physics.add.collider(player, kid, this.kidHit, null, this );
+      this.physics.add.collider(bench, kid);
+    }
   }
 
   update() {
@@ -557,6 +633,17 @@ class gameplay extends Phaser.Scene {
     }
   }
 
+  kidHit(player, kid) {
+    kid.destroy();
+    lives--;
+    countKid--;
+    if (sfx == true) {
+      badsfx = this.sound.add('badsfx', { loop: false });
+      badsfx.play();
+    }
+    this.loseLive();
+  }
+
   loseLive() {
     if (lives > -1) {
       // Se quita un corazón cada vez que se choca con un objeto malo
@@ -586,6 +673,7 @@ class gameplay extends Phaser.Scene {
     vel2X2 = 250;
     vel2Y = 250;
     vel2Y2 = -250;
+    countvac++;
     timedEvent2 = this.time.addEvent({
       delay: 10000,
       callback: this.endVaccine,
@@ -610,6 +698,7 @@ class gameplay extends Phaser.Scene {
   collectChinstrap(player, chinstrap) {
     chinstrap.destroy();
     player.setTexture("player2");
+    countchins++;
     upAnim = "up2";
     downAnim = "down2";
     rightAnim = "right2";
@@ -655,12 +744,17 @@ class gameplay extends Phaser.Scene {
   chinstrapErrase(collider, chinstrap) {
     chinstrap.destroy();
   }
+  kidErrase(collider, kid) {
+    kid.destroy();
+    countKid--;
+  }
 
   //Se ejecuta esta función al perderse todas las vidas.
   gameover() {
     this.physics.pause();
     timedEvent.paused = true;
     player.anims.play(stopAnim);
+
     if (level == 1) {
       ball.anims.play("stopBall", true);
     } else if (level !== 1 && stopAnim == "stop2") {
@@ -669,6 +763,12 @@ class gameplay extends Phaser.Scene {
       downAnim = "down";
       rightAnim = "right";
       leftAnim = "left";
+    }
+    if (level == 3) {
+      paper.anims.play("stopPaper", true);
+    }
+    if (countKid !== 0) {
+      stopKid();
     }
 
     this.add.image(400, 300, "lost");
@@ -715,6 +815,9 @@ class gameplay extends Phaser.Scene {
     }
     if (level == 3) {
       paper.anims.play("stopPaper", true);
+    }
+    if (countKid !== 0) {
+      stopKid();
     }
     this.add.image(400, 300, "overcome");
 
@@ -829,6 +932,9 @@ class gameplay extends Phaser.Scene {
     if (level !== 1 && stopAnim == "stop2") {
       timedEvent3.paused = true;
     }
+    if (countKid !== 0) {
+      stopKid();
+    }
     menu = this.add.image(400, 300, "pause");
 
     button = this.add
@@ -870,13 +976,20 @@ class gameplay extends Phaser.Scene {
     button3.destroy();
 
     if (level == 1) {
-      ball.anims.play("playBall", true);
+      if (ball.body.velocity.x !== 0 || ball.body.velocity.y !== 0) {
+        ball.anims.play("playBall", true);
+      }
     }
     if (level == 3) {
-      paper.anims.play("playPaper", true);
+      if (paper.body.velocity.x !== 0 || paper.body.velocity.y !== 0) {
+        paper.anims.play("playPaper");
+      }
     }
     if (level !== 1 && stopAnim == "stop2") {
       timedEvent3.paused = false;
+    }
+    if (countKid !== 0) {
+      playKid();
     }
     this.physics.resume();
     cursors = this.input.keyboard.createCursorKeys()
