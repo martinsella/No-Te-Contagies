@@ -314,6 +314,15 @@ class gameplay extends Phaser.Scene {
       repeat: 0,
     });
     this.anims.create({
+      key: "victory",
+      frames: this.anims.generateFrameNumbers("player3", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 6,
+      repeat: -1,
+    });
+    this.anims.create({
       key: "stop",
       frames: [{ key: "player", frame: 5 }],
       framerate: 10,
@@ -847,7 +856,7 @@ class gameplay extends Phaser.Scene {
     progressBar.fillRect(19, 19, 200, 19);
     this.physics.pause();
     timedEvent.paused = true;
-    player.anims.play(stopAnim);
+    player.anims.play("victory").setScale(0.43);
     
     if (level == 1) {
       ball.anims.play("stopBall", true);
