@@ -508,17 +508,13 @@ class gameplay extends Phaser.Scene {
 
   objects() {
     //Randomización del respawn de objetos.
-    if (level == 1 && countvac == 0) {
+    if (level == 1) {
       pattern = Phaser.Math.FloatBetween(0, 0.7);
-    } else if (level == 1 && countvac > 0) {
-      pattern = Phaser.Math.FloatBetween(0.1, 0.7);
-    } else if (level == 2 && countvac == 0) {
-      pattern = Phaser.Math.FloatBetween(0, 1.1);
-    } else if (level == 2 && countvac > 0) {
-      pattern = Phaser.Math.FloatBetween(0.1, 1.1);
+    } else if (level == 2) {
+      pattern = Phaser.Math.FloatBetween(0, 1.05);
     } else {
       if (level == 3 && countKid == 0) {
-        pattern = Phaser.Math.FloatBetween(0, 2.3);
+        pattern = Phaser.Math.FloatBetween(0, 2.45);
       } else {
         pattern = Phaser.Math.FloatBetween(0, 1.4);
       }
@@ -547,19 +543,19 @@ class gameplay extends Phaser.Scene {
         vaccine = new Vaccine({ scene: this, x: pattern3, y: pattern4 });
         countvac++;
         velVaccine();
-      } else if (pattern >= 0.1 && pattern < 0.4) {
+      } else if (pattern >= 0 && pattern < 0.35) {
         virus = new Virus({ scene: this, x: pattern3, y: pattern4 });
         velVirus();
-      } else if (pattern >= 0.4 && pattern < 0.7) {
+      } else if (pattern >= 0.35 && pattern < 0.7) {
         soap = new Soap({ scene: this, x: pattern3, y: pattern4 });
         velSoap();
-      } else if (pattern >= 0.7 && pattern < 0.8 && stopAnim == "stop" && countchins < 3 || countchins == undefined) {
+      } else if (pattern > 0.7 && pattern < 0.8 && stopAnim == "stop" && countchins < 3 || countchins == undefined) {
         chinstrap = new Chinstrap({ scene: this, x: pattern3, y: pattern4 });
         velChinstrap();
-      } else if (pattern >= 0.8 && pattern < 1.1) {
+      } else if (pattern >= 0.7 && pattern < 1.05) {
         mud = new Mud({ scene: this, x: pattern3, y: pattern4 });
         velMud();
-      } else if (pattern >= 1.1 && pattern < 1.4) {
+      } else if (pattern >= 1.05 && pattern < 1.4) {
         alcohol = new Alcohol({ scene: this, x: pattern3, y: pattern4 });
         velAlcohol();
       } else if (pattern >= 1.4 && countKid == 0) {

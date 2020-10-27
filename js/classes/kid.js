@@ -10,14 +10,14 @@ class Kid extends Phaser.Physics.Arcade.Sprite {
 }
 
 export function posKid() {
-  if (pattern >= 1.4 && pattern < 1.7) {
+  if (pattern >= 1.4 && pattern < 1.75) {
     whatKid = "kid";
     upAnim2 = "upKid";
     downAnim2 = "downKid";
     rightAnim2 = "rightKid";
     leftAnim2 = "leftKid";
     stopAnim2 = "stopKid";  
-  } else if (pattern >= 1.7 && pattern < 2) {
+  } else if (pattern >= 1.75 && pattern < 2.1) {
     whatKid = "kid2";
     upAnim2 = "upKid2";
     downAnim2 = "downKid2";
