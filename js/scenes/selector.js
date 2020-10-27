@@ -140,6 +140,9 @@ class selector extends Phaser.Scene {
           if (level != 3) {
             level = 3;
           }
+          if (sfx == true) {
+            bnextsfx.play();
+          } 
           if (track !== undefined) {
             track.pause();
           }

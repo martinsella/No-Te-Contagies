@@ -17,13 +17,20 @@ export function posKid() {
     rightAnim2 = "rightKid";
     leftAnim2 = "leftKid";
     stopAnim2 = "stopKid";  
-  } else if (pattern >= 1.7) {
+  } else if (pattern >= 1.7 && pattern < 2) {
     whatKid = "kid2";
     upAnim2 = "upKid2";
     downAnim2 = "downKid2";
     rightAnim2 = "rightKid2";
     leftAnim2 = "leftKid2";
     stopAnim2 = "stopKid2"; 
+  } else {
+    whatKid = "kid3";
+    upAnim2 = "upKid3";
+    downAnim2 = "downKid3";
+    rightAnim2 = "rightKid3";
+    leftAnim2 = "leftKid3";
+    stopAnim2 = "stopKid3"; 
   }
   if (pattern2 == 0) {
     pattern3 = Phaser.Math.FloatBetween(240.445, 309.445);
@@ -39,7 +46,6 @@ export function posKid() {
       pattern4 = Phaser.Math.FloatBetween(379.25, 420.75);
   }
 }
-
 
 export function velKid() {
     if (pattern3 == 0 || pattern3 == 800) {

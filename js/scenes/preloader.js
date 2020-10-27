@@ -47,6 +47,11 @@ class preloader extends Phaser.Scene {
       frameHeight: 491,
       frameWidth: 93,
     });
+    this.load.spritesheet("kid3", "assets/images/objects/kid3.png", {
+      //Indicamos el alto y ancho (en píxeles) de cada frame que compone el spritesheet.
+      frameHeight: 491,
+      frameWidth: 93,
+    });
     this.load.spritesheet("ball", "assets/images/objects/ball.png", {
       //Indicamos el alto y ancho (en píxeles) de cada frame que compone el spritesheet.
       frameHeight: 25,
@@ -72,12 +77,14 @@ class preloader extends Phaser.Scene {
     this.load.image("fsoap", "assets/images/objects/fsoap.png");
     this.load.image("fvaccine", "assets/images/objects/fvaccine.png");
     this.load.image("fvirus", "assets/images/objects/fvirus.png");
+    this.load.image("fkid", "assets/images/objects/fkid.png");
     this.load.image("ialcohol", "assets/images/objects/ialcohol.png");
     this.load.image("ichinstrap", "assets/images/objects/ichinstrap.png");
     this.load.image("imud", "assets/images/objects/imud.png");
     this.load.image("isoap", "assets/images/objects/isoap.png");
     this.load.image("ivaccine", "assets/images/objects/ivaccine.png");
     this.load.image("ivirus", "assets/images/objects/ivirus.png");
+    this.load.image("ikid", "assets/images/objects/ikid.png");
     this.load.image("ipvp", "assets/images/objects/ipvp.png");
     this.load.image("bench", "assets/images/objects/bench.png");
     this.load.image("bench2", "assets/images/objects/bench2.png");

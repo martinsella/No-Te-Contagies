@@ -98,6 +98,8 @@ class gameplay extends Phaser.Scene {
           new Bench({scene: this, x: 400, y: 490, texture: "bench8"}),
           new Bench({scene: this, x: 627, y: 490, texture: "bench9"})
         ]
+
+        //seteamos las animaciones de los niños infectados.
         this.anims.create({
           key: "upKid", //Definimos nombre a la animación.
           frames: this.anims.generateFrameNumbers("kid", { start: 0, end: 4 }), //definimos los frames que abarca.
@@ -167,6 +169,42 @@ class gameplay extends Phaser.Scene {
         this.anims.create({
           key: "stopKid2",
           frames: [{ key: "kid2", frame: 5 }],
+          framerate: 10,
+          repeat: 0,
+        });
+        this.anims.create({
+          key: "upKid3", //Definimos nombre a la animación.
+          frames: this.anims.generateFrameNumbers("kid3", { start: 0, end: 4 }), //definimos los frames que abarca.
+          framerate: 10, //velocidad de frames/frames por segundo.
+          repeat: -1, //cuantas veces se repite (0 = infinitamente).
+        });
+        this.anims.create({
+          key: "downKid3",
+          frames: this.anims.generateFrameNumbers("kid3", { start: 5, end: 9 }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "rightKid3",
+          frames: this.anims.generateFrameNumbers("kid3", {
+            start: 10,
+            end: 15,
+          }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "leftKid3",
+          frames: this.anims.generateFrameNumbers("kid3", {
+            start: 16,
+            end: 21,
+          }),
+          framerate: 10,
+          repeat: -1,
+        });
+        this.anims.create({
+          key: "stopKid3",
+          frames: [{ key: "kid3", frame: 5 }],
           framerate: 10,
           repeat: 0,
         });
@@ -479,8 +517,8 @@ class gameplay extends Phaser.Scene {
     } else if (level == 2 && countvac > 0) {
       pattern = Phaser.Math.FloatBetween(0.1, 1.1);
     } else {
-      if (countKid == 0) {
-        pattern = Phaser.Math.FloatBetween(0, 2);
+      if (level == 3 && countKid == 0) {
+        pattern = Phaser.Math.FloatBetween(0, 2.3);
       } else {
         pattern = Phaser.Math.FloatBetween(0, 1.4);
       }
@@ -500,9 +538,9 @@ class gameplay extends Phaser.Scene {
       pattern4 = Phaser.Math.Between(20, 580);
     }
     if (pattern3 == 0 || pattern4 == 0) {
-      velObj = 200;
+      velObj = 170;
     } else if (pattern3 == 800 || pattern4 == 600) {
-      velObj = -200;
+      velObj = -170;
     }
     //Respawn de objetos.
       if (pattern < 0.1 && countvac == 0) {
@@ -515,7 +553,7 @@ class gameplay extends Phaser.Scene {
       } else if (pattern >= 0.4 && pattern < 0.7) {
         soap = new Soap({ scene: this, x: pattern3, y: pattern4 });
         velSoap();
-      } else if (pattern >= 0.7 && pattern < 0.8 && countchins < 3 && stopAnim == "stop") {
+      } else if (pattern >= 0.7 && pattern < 0.8 && stopAnim == "stop" && countchins < 3 || countchins == undefined) {
         chinstrap = new Chinstrap({ scene: this, x: pattern3, y: pattern4 });
         velChinstrap();
       } else if (pattern >= 0.8 && pattern < 1.1) {
@@ -527,7 +565,7 @@ class gameplay extends Phaser.Scene {
       } else if (pattern >= 1.4 && countKid == 0) {
         posKid();
         kid = new Kid({ scene: this, x: pattern3, y: pattern4, texture: whatKid });
-        countKid++;
+        countKid += 1;
         velKid();
       }
 
@@ -729,6 +767,7 @@ class gameplay extends Phaser.Scene {
     rightAnim = "right";
     leftAnim = "left";
     stopAnim = "stop";
+    chinstrap = undefined;
   }
 
   mudErrase(collider, mud) {
@@ -749,6 +788,7 @@ class gameplay extends Phaser.Scene {
   }
   chinstrapErrase(collider, chinstrap) {
     chinstrap.destroy();
+    chinstrap = undefined;
   }
   kidErrase(collider, kid) {
     kid.destroy();
@@ -773,9 +813,9 @@ class gameplay extends Phaser.Scene {
     if (level == 3) {
       paper.anims.play("stopPaper", true);
     }
-    if (countKid !== 0) {
+    if (level == 3 && countKid !== 0) {
       stopKid();
-      countkid--;
+      countKid--;
     }
 
     this.add.image(400, 300, "lost");
@@ -825,7 +865,7 @@ class gameplay extends Phaser.Scene {
     if (level == 3) {
       paper.anims.play("stopPaper", true);
     }
-    if (countKid !== 0) {
+    if (level == 3 && countKid !== 0) {
       stopKid();
       countKid--;
     }
@@ -946,7 +986,7 @@ class gameplay extends Phaser.Scene {
     if (level !== 1 && stopAnim == "stop2") {
       timedEvent3.paused = true;
     }
-    if (countKid !== 0) {
+    if (level == 3 && countKid !== 0) {
       stopKid();
     }
     menu = this.add.image(400, 300, "pause");
@@ -1004,7 +1044,7 @@ class gameplay extends Phaser.Scene {
     if (level !== 1 && stopAnim == "stop2") {
       timedEvent3.paused = false;
     }
-    if (countKid !== 0) {
+    if (level == 3 && countKid !== 0) {
       playKid();
     }
     this.physics.resume();
@@ -1040,81 +1080,71 @@ class gameplay extends Phaser.Scene {
       .image(163, 330, "fsoap")
       .setInteractive()
       .on(type, () => {
-        if (i == 0) {
-          iobject = this.add.image(163, 330, "isoap");
-          i++;
-        } else {
+        if (iobject !== undefined) {
           iobject.destroy();
-          iobject = this.add.image(163, 330, "isoap");
         }
+        iobject = this.add.image(163, 330, "isoap");
       });
 
     fvaccine = this.add
       .image(298, 328, "fvaccine")
       .setInteractive()
       .on(type, () => {
-        if (i == 0) {
-          iobject = this.add.image(298, 328, "ivaccine");
-          i++;
-        } else {
+        if (iobject !== undefined) {
           iobject.destroy();
-          iobject = this.add.image(298, 328, "ivaccine");
         }
+        iobject = this.add.image(298, 328, "ivaccine");
       });
 
     falcohol = this.add
       .image(168, 413, "falcohol")
       .setInteractive()
       .on(type, () => {
-        if (i == 0) {
-          iobject = this.add.image(168, 413, "ialcohol");
-          i++;
-        } else {
+        if (iobject !== undefined) {
           iobject.destroy();
-          iobject = this.add.image(168, 413, "ialcohol");
         }
+        iobject = this.add.image(168, 413, "ialcohol");
       });
 
     fchinstrap = this.add
       .image(295, 416, "fchinstrap")
       .setInteractive()
       .on(type, () => {
-        if (i == 0) {
-          iobject = this.add.image(295, 416, "ichinstrap");
-          i++;
-        } else {
+        if (iobject !== undefined) {
           iobject.destroy();
-          iobject = this.add.image(295, 416, "ichinstrap");
         }
+        iobject = this.add.image(295, 416, "ichinstrap");
       });
 
     fmud = this.add
-      .image(506, 336, "fmud")
+      .image(506, 328, "fmud")
       .setInteractive()
       .on(type, () => {
-        if (i == 0) {
-          iobject = this.add.image(506, 336, "imud");
-          i++;
-        } else {
+        if (iobject !== undefined) {
           iobject.destroy();
-          iobject = this.add.image(506, 336, "imud");
         }
+        iobject = this.add.image(506, 328, "imud");
       });
 
     fvirus = this.add
-      .image(648, 348, "fvirus")
+      .image(648, 328, "fvirus")
       .setInteractive()
       .on(type, () => {
-        if (i == 0) {
-          iobject = this.add.image(648, 345, "ivirus");
-          i++;
-        } else {
+        if (iobject !== undefined) {
           iobject.destroy();
-          iobject = this.add.image(648, 345, "ivirus");
         }
+        iobject = this.add.image(648, 328, "ivirus");
       });
 
-    i = 0;
+    fkid = this.add
+      .image(574, 407, "fkid")
+      .setInteractive()
+      .on(type, () => {
+        if (iobject !== undefined) {
+          iobject.destroy();
+        }
+        iobject = this.add.image(574, 407, "ikid");
+      });
 
     //Creación de botones y seteo de funciones de los mismos.
     button = this.add
@@ -1152,6 +1182,7 @@ class gameplay extends Phaser.Scene {
     fchinstrap.destroy();
     fmud.destroy();
     fvirus.destroy();
+    fkid.destroy();
     button.destroy();
     button2.destroy();
     button3.destroy();
@@ -1166,6 +1197,7 @@ class gameplay extends Phaser.Scene {
     fchinstrap.destroy();
     fmud.destroy();
     fvirus.destroy();
+    fkid.destroy();
     button.destroy();
     button2.destroy();
     button3.destroy();
