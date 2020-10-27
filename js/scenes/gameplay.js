@@ -867,7 +867,7 @@ class gameplay extends Phaser.Scene {
     }
     this.add.image(400, 300, "overcome");
 
-    if (levOver <= 2) {
+    if (level < 3) {
       this.add
         .image(400, 315, "bcontinue")
         .setScale(1.2)
