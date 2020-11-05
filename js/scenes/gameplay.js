@@ -239,7 +239,8 @@ class gameplay extends Phaser.Scene {
         }      
       });
     bmsc = this.add
-      .image(704, 30, bmscText)
+      .image(684, 30, bmscText)
+      .setScale(1.20)
       .setInteractive()
       .on("pointerdown", () => {
         if (music == true) {
@@ -266,7 +267,8 @@ class gameplay extends Phaser.Scene {
         }
       });
     bsfx = this.add
-      .image(734, 30, bsfxText)
+      .image(724, 30, bsfxText)
+      .setScale(1.20)
       .setInteractive()
       .on("pointerdown", () => {
         if (sfx == true) {
@@ -605,6 +607,10 @@ class gameplay extends Phaser.Scene {
       if (music == true) {
         lvlmsc.stop();
       }
+      if (iobject !== undefined) {
+        iobject.destroy();
+        timedEvent4.destroy();
+      }
       lives = 3;
       score = 0;
       cursors = undefined;
@@ -620,6 +626,10 @@ class gameplay extends Phaser.Scene {
       if (music == true) {
         lvlmsc.stop();
       }
+      if (iobject !== undefined) {
+        iobject.destroy();
+        timedEvent4.destroy();
+      }
       if (levOver <= 2 && i !== 1) {
         levOver++;
         i = 1;
@@ -632,6 +642,11 @@ class gameplay extends Phaser.Scene {
   }
 
   collectSoap(player, soap) {
+    this.delScore2();
+    posX = soap.x
+    posY = soap.y
+    iobject = this.add.image(posX, posY, "psoap");
+    this.delScore();
     soap.destroy();
     progressBar.fillRect(19, 19, (score += 10), 19);
     if (sfx == true) {
@@ -641,6 +656,11 @@ class gameplay extends Phaser.Scene {
   }
 
   collectAlcohol(player, alcohol) {
+    this.delScore2();
+    posX = alcohol.x
+    posY = alcohol.y
+    iobject = this.add.image(posX, posY, "palcohol");
+    this.delScore();
     alcohol.destroy();
     progressBar.fillRect(19, 19, (score += 7.5), 19);
     if (sfx == true) {
@@ -650,6 +670,11 @@ class gameplay extends Phaser.Scene {
   }
 
   mudHit(player, mud) {
+    this.delScore2();
+    posX = mud.x
+    posY = mud.y
+    iobject = this.add.image(posX, posY, "pbad");
+    this.delScore();
     mud.destroy();
     if (sfx == true) {
       badsfx = this.sound.add('badsfx', { loop: false });
@@ -664,6 +689,11 @@ class gameplay extends Phaser.Scene {
   }
 
   virusHit(player, virus) {
+    this.delScore2();
+    posX = virus.x
+    posY = virus.y
+    iobject = this.add.image(posX, posY, "pbad");
+    this.delScore();
     virus.destroy();
     if (sfx == true) {
       badsfx = this.sound.add('badsfx', { loop: false });
@@ -678,6 +708,11 @@ class gameplay extends Phaser.Scene {
   }
 
   kidHit(player, kid) {
+    this.delScore2();
+    posX = kid.x
+    posY = kid.y
+    iobject = this.add.image(posX, posY, "pbad");
+    this.delScore();
     kid.destroy();
     countKid--;
     if (sfx == true) {
@@ -707,6 +742,11 @@ class gameplay extends Phaser.Scene {
 
   //función que se ejecuta al agarrar una vacuna.
   vaccinated(player, vaccine) {
+    this.delScore2();
+    posX = vaccine.x
+    posY = vaccine.y
+    iobject = this.add.image(posX, posY, "pvaccine");
+    this.delScore();
     vaccine.destroy();
     progressBar.fillRect(19, 19, (score += 40), 19);
     if (sfx == true) {
@@ -744,6 +784,11 @@ class gameplay extends Phaser.Scene {
   }
 
   collectChinstrap(player, chinstrap) {
+    this.delScore2();
+    posX = chinstrap.x
+    posY = chinstrap.y
+    iobject = this.add.image(posX, posY, "pchinstrap");
+    this.delScore();
     chinstrap.destroy();
     player.setTexture("player2");
     countchins++;
@@ -773,6 +818,26 @@ class gameplay extends Phaser.Scene {
     leftAnim = "left";
     stopAnim = "stop";
     chinstrap = undefined;
+  }
+
+  delScore() {
+    timedEvent4 = this.time.addEvent({
+      delay: 2000,
+      callback: () => {
+        if (iobject !== undefined) {
+          iobject.destroy();
+        }
+      },
+      callbackScope: this,
+      loop: false,
+    });
+  }
+
+  delScore2() {
+    if (iobject !== undefined) {
+      iobject.destroy();
+      timedEvent4.destroy();
+    }
   }
 
   mudErrase(collider, mud) {
@@ -806,6 +871,11 @@ class gameplay extends Phaser.Scene {
     timedEvent.paused = true;
     player.anims.play(stopAnim);
 
+    if( music == true ){
+      this.lvlfmsc = this.sound.add('lvllostmsc')
+      this.lvlfmsc.play()
+    }
+
     if (level == 1) {
       ball.anims.play("stopBall", true);
     } else if (level !== 1 && stopAnim == "stop2") {
@@ -823,10 +893,10 @@ class gameplay extends Phaser.Scene {
       countKid--;
     }
 
-    this.add.image(400, 300, "lost");
+    this.add.image(400, 300, losttxt);
 
     this.add
-      .image(325, 315, "bretry")
+      .image(325, 315, retryb)
       .setInteractive()
       .on("pointerdown", () => {
         this.restart()
@@ -836,7 +906,7 @@ class gameplay extends Phaser.Scene {
       });
 
     this.add
-      .image(475, 315, "bmenu")
+      .image(475, 315, menub)
       .setInteractive()
       .on("pointerdown", () => {
         this.exit()
@@ -854,6 +924,12 @@ class gameplay extends Phaser.Scene {
     progressBar.clear();
     progressBar.fillStyle(0xffffff, 1);
     progressBar.fillRect(19, 19, 200, 19);
+    if (music == true){
+      this.lvlsupmsc = this.sound.add('lvlsupmsc')
+      this.lvlsupmsc.play()
+    }
+    player.destroy()
+    player = new Player({ scene: this, x: 380, y: 470, texture: "player" });
     this.physics.pause();
     timedEvent.paused = true;
     player.anims.play("victory").setScale(0.43);
@@ -874,11 +950,11 @@ class gameplay extends Phaser.Scene {
       stopKid();
       countKid--;
     }
-    this.add.image(400, 300, "overcome");
+    this.add.image(400, 300, wintxt);
 
     if (level < 3) {
       this.add
-        .image(400, 315, "bcontinue")
+        .image(400, 315, continueb)
         .setScale(1.2)
         .setInteractive()
         .on("pointerdown", () => {
@@ -888,7 +964,7 @@ class gameplay extends Phaser.Scene {
           }  
         });
       this.add
-        .image(290, 390, "bretry")
+        .image(290, 390, retryb)
         .setInteractive()
         .on("pointerdown", () => {
           this.restart()
@@ -898,7 +974,7 @@ class gameplay extends Phaser.Scene {
         });
   
       this.add
-        .image(510, 390, "bmenu")
+        .image(510, 390, menub)
         .setInteractive()
         .on("pointerdown", () => {
           this.exit()
@@ -911,7 +987,7 @@ class gameplay extends Phaser.Scene {
         });
     } else {
       this.add
-        .image(325, 315, "bretry")
+        .image(325, 315, retryb)
         .setInteractive()
         .on("pointerdown", () => {
           this.restart()
@@ -921,7 +997,7 @@ class gameplay extends Phaser.Scene {
         });
   
       this.add
-        .image(475, 315, "bmenu")
+        .image(475, 315, menub)
         .setInteractive()
         .on("pointerdown", () => {
           this.exit()
@@ -983,6 +1059,10 @@ class gameplay extends Phaser.Scene {
     this.physics.pause();
     cursors = undefined;
     player.anims.play(stopAnim);
+    if (timedEvent4 !== undefined) {
+      iobject.destroy();
+      timedEvent4.destroy();
+    }
     if (level == 1) {
       ball.anims.play("stopBall", true);
     } else if (level == 3) {
@@ -994,10 +1074,10 @@ class gameplay extends Phaser.Scene {
     if (level == 3 && countKid !== 0) {
       stopKid();
     }
-    menu = this.add.image(400, 300, "pause");
+    menu = this.add.image(400, 300, pausescene);
 
     button = this.add
-      .image(400, 285, "bresume")
+      .image(400, 285, resumeb)
       .setInteractive()
       .on("pointerdown", () => {
         this.outPause()
@@ -1007,7 +1087,7 @@ class gameplay extends Phaser.Scene {
       });
 
     button2 = this.add
-      .image(335, 355, "bhelp2")
+      .image(335, 355, helpb)
       .setInteractive()
       .on("pointerdown", () => {
         this.gameHelp()
@@ -1017,7 +1097,7 @@ class gameplay extends Phaser.Scene {
       });
 
     button3 = this.add
-      .image(465, 355, "bmenu")
+      .image(465, 355, menub)
       .setInteractive()
       .on("pointerdown", () => {
         if (music == true) {
@@ -1072,7 +1152,7 @@ class gameplay extends Phaser.Scene {
     button2.destroy();
     button3.destroy();
     menu = this.add
-      .image(400, 300, "help2")
+      .image(400, 300, helpscene2)
       .setInteractive()
       .on(type, () => {
         if (iobject !== undefined) {
@@ -1088,7 +1168,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(163, 330, "isoap");
+        iobject = this.add.image(163, 330, infojabon);
       });
 
     fvaccine = this.add
@@ -1098,7 +1178,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(298, 328, "ivaccine");
+        iobject = this.add.image(298, 328, infovacuna);
       });
 
     falcohol = this.add
@@ -1108,7 +1188,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(168, 413, "ialcohol");
+        iobject = this.add.image(168, 413, infoalcohol);
       });
 
     fchinstrap = this.add
@@ -1118,7 +1198,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(295, 416, "ichinstrap");
+        iobject = this.add.image(295, 416, infobarbijo);
       });
 
     fmud = this.add
@@ -1128,7 +1208,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(506, 328, "imud");
+        iobject = this.add.image(506, 328, infobarro);
       });
 
     fvirus = this.add
@@ -1138,7 +1218,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(648, 328, "ivirus");
+        iobject = this.add.image(648, 328, infovirus);
       });
 
     fkid = this.add
@@ -1148,7 +1228,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(574, 407, "ikid");
+        iobject = this.add.image(574, 407, infokid);
       });
 
     //Creación de botones y seteo de funciones de los mismos.
@@ -1166,7 +1246,7 @@ class gameplay extends Phaser.Scene {
       });
 
     button2 = this.add
-      .image(677, 514, "bcontrols")
+      .image(677, 514, botcontroles)
       .setInteractive()
       .on("pointerdown", () => {
         this.gameControls()
@@ -1206,7 +1286,7 @@ class gameplay extends Phaser.Scene {
     button.destroy();
     button2.destroy();
     button3.destroy();
-    menu = this.add.image(400, 300, "controls2");
+    menu = this.add.image(400, 300, ctrlsscene2);
     button = this.add
       .image(102, 90, "bback")
       .setInteractive()

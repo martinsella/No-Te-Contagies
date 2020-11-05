@@ -7,6 +7,21 @@ class preloader extends Phaser.Scene {
 
   //Realizamos la precarga de assets (imágenes, spritesheets, etc) definiendo un nombre a cada uno, seguido de la ruta donde este se encuentra.
   preload() {
+    this.graphics = this.add.graphics();
+		this.newGraphics = this.add.graphics();
+		var progressBar = new Phaser.Geom.Rectangle(200, 200, 400, 50);
+		var progressBarFill = new Phaser.Geom.Rectangle(205, 205, 290, 40);
+
+		this.graphics.fillStyle(0xffffff, 1);
+		this.graphics.fillRectShape(progressBar);
+
+		this.newGraphics.fillStyle(0x3587e2, 1);
+		this.newGraphics.fillRectShape(progressBarFill);
+
+		var loadingText = this.add.text(250,260,"Loading: ", { fontSize: '32px', fill: '#FFF' });
+
+    
+		for(var i =0;i<30;i++) {
     //carga de escenas.
     this.load.image("lenguage", "assets/images/menus/lenguage.png");
     this.load.image("menu", "assets/images/menus/menu.png");
@@ -91,6 +106,11 @@ class preloader extends Phaser.Scene {
     this.load.image("ivirus", "assets/images/objects/ivirus.png");
     this.load.image("ikid", "assets/images/objects/ikid.png");
     this.load.image("ipvp", "assets/images/objects/ipvp.png");
+    this.load.image("pbad", "assets/images/objects/pbad.png");
+    this.load.image("palcohol", "assets/images/objects/palcohol.png");
+    this.load.image("psoap", "assets/images/objects/psoap.png");
+    this.load.image("pchinstrap", "assets/images/objects/pchinstrap.png");
+    this.load.image("pvaccine", "assets/images/objects/pvaccine.png");
     this.load.image("bench", "assets/images/objects/bench.png");
     this.load.image("bench2", "assets/images/objects/bench2.png");
     this.load.image("bench3", "assets/images/objects/bench3.png");
@@ -139,6 +159,39 @@ class preloader extends Phaser.Scene {
     this.load.image("bmenu", "assets/images/buttons/bmenu.png");
     this.load.image("bhowtoplay", "assets/images/buttons/bhowtoplay.png");
 
+    //carga de assets en ingles
+    this.load.image('HTP-en', 'assets/images/menus/Ingles/Como Jugar.png');
+    this.load.image('Ctrls-en', 'assets/images/menus/Ingles/Controles.png');
+    this.load.image('ialcohol-en', 'assets/images/menus/Ingles/info alcohol.png');
+    this.load.image('ibarbijo-en', 'assets/images/menus/Ingles/info barbijo.png');
+    this.load.image('ibarro-en', 'assets/images/menus/Ingles/info barro.png');
+    this.load.image('icontagiados-en', 'assets/images/menus/Ingles/info contagiados.png');
+    this.load.image('ijabon-en', 'assets/images/menus/Ingles/info jabón.png');
+    this.load.image('ivacuna-en', 'assets/images/menus/Ingles/info vacuna.png');
+    this.load.image('ivirus-en', 'assets/images/menus/Ingles/info virus.png');
+    this.load.image('lvlsup-en', 'assets/images/menus/Ingles/Nivel superado.png');
+    this.load.image('pause-en', 'assets/images/menus/Ingles/Pausa.png');
+    this.load.image('lvllost-en', 'assets/images/menus/Ingles/Te has contagiado.png');
+    this.load.image('credits-en', 'assets/images/menus/Ingles/Menú creditos.png');
+    this.load.image('htp2-en', 'assets/images/menus/Ingles/htp2.png');
+    this.load.image('controls2-en', 'assets/images/menus/Ingles/controls2.png');
+    this.load.image('selector-en', 'assets/images/menus/Ingles/Selector.png');
+
+    //botones en ingles
+    this.load.image('bcontrols-en', 'assets/images/buttons/Ingles/controls.png');
+    this.load.image('bhelp-en', 'assets/images/buttons/Ingles/help.png');
+    this.load.image('bhelp2-en', 'assets/images/buttons/Ingles/help2.png')
+    this.load.image('bhtp-en', 'assets/images/buttons/Ingles/how to play.png');
+    this.load.image('bmenu-en', 'assets/images/buttons/Ingles/main menu.png');
+    this.load.image('bnextlvl-en', 'assets/images/buttons/Ingles/next level.png');
+    this.load.image('bresume-en', 'assets/images/buttons/Ingles/resume.png');
+    this.load.image('bretry-en', 'assets/images/buttons/Ingles/retry.png');
+    this.load.image('bcredits-en', 'assets/images/buttons/Ingles/credits.png');
+    this.load.image('bexit-en', 'assets/images/buttons/Ingles/exit.png');
+    this.load.image('bplay-en', 'assets/images/buttons/Ingles/play.png');
+    this.load.image('bpvp-en', 'assets/images/buttons/Ingles/pvp.png');
+    this.load.image('ipvp-en', 'assets/images/buttons/Ingles/info jvj.png');
+
     //carga de audio.
     this.load.audio("mainmsc", "assets/music/main.mp3");
     this.load.audio("lvl1msc", "assets/music/level1.mp3");
@@ -148,6 +201,27 @@ class preloader extends Phaser.Scene {
     this.load.audio("vaccinesfx", "assets/sfx/vaccine.mp3");
     this.load.audio("badsfx", "assets/sfx/bad.mp3");
     this.load.audio("bbacksfx", "assets/sfx/bback.mp3");
+    this.load.audio('lvlsupmsc', 'assets/music/Musica nivel superado.mp3');
+    this.load.audio('lvllostmsc', 'assets/music/Musica nivel perdido.mp3');
+		}
+
+		this.load.on('progress', this.updateBar, {newGraphics:this.newGraphics,loadingText:loadingText});
+		this.load.on('complete', this.complete);
+	}
+
+	updateBar(percentage) {
+    this.newGraphics.clear();
+    this.newGraphics.fillStyle(0x3587e2, 1);
+    this.newGraphics.fillRectShape(new Phaser.Geom.Rectangle(205, 205, percentage*390, 40));
+        
+    percentage = percentage * 100;
+    this.loadingText.setText("Cargando: " + percentage.toFixed(2) + "%");
+    console.log("P:" + percentage);
+	}
+
+	complete() {
+		console.log("COMPLETE!");
+
   }
 
   create() {
