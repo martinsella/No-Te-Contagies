@@ -670,11 +670,8 @@ class gameplay extends Phaser.Scene {
   }
 
   mudHit(player, mud) {
-    this.delScore2();
     posX = mud.x
     posY = mud.y
-    iobject = this.add.image(posX, posY, "pbad");
-    this.delScore();
     mud.destroy();
     if (sfx == true) {
       badsfx = this.sound.add('badsfx', { loop: false });
@@ -685,15 +682,15 @@ class gameplay extends Phaser.Scene {
     } else {
       lives--;
       this.loseLive();
+      this.delScore2();
+      iobject = this.add.image(posX, posY, "pbad");
+      this.delScore();
     }
   }
 
   virusHit(player, virus) {
-    this.delScore2();
     posX = virus.x
     posY = virus.y
-    iobject = this.add.image(posX, posY, "pbad");
-    this.delScore();
     virus.destroy();
     if (sfx == true) {
       badsfx = this.sound.add('badsfx', { loop: false });
@@ -704,15 +701,15 @@ class gameplay extends Phaser.Scene {
     } else {
       lives--;
       this.loseLive();
+      this.delScore2();
+      iobject = this.add.image(posX, posY, "pbad");
+      this.delScore();
     }
   }
 
   kidHit(player, kid) {
-    this.delScore2();
     posX = kid.x
     posY = kid.y
-    iobject = this.add.image(posX, posY, "pbad");
-    this.delScore();
     kid.destroy();
     countKid--;
     if (sfx == true) {
@@ -724,6 +721,9 @@ class gameplay extends Phaser.Scene {
     } else {
       lives--;
       this.loseLive();
+      this.delScore2();
+      iobject = this.add.image(posX, posY, "pbad");
+      this.delScore();
     }
   }
 
