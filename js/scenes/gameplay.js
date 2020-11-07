@@ -711,7 +711,7 @@ class gameplay extends Phaser.Scene {
     posX = kid.x
     posY = kid.y
     kid.destroy();
-    countKid--;
+    countKid = 0;
     if (sfx == true) {
       badsfx = this.sound.add('badsfx', { loop: false });
       badsfx.play();
@@ -811,6 +811,7 @@ class gameplay extends Phaser.Scene {
   }
 
   endChinstrap() {
+    timedEvent3.destroy();
     player.setTexture("player");
     upAnim = "up";
     downAnim = "down";
@@ -862,7 +863,7 @@ class gameplay extends Phaser.Scene {
   }
   kidErrase(collider, kid) {
     kid.destroy();
-    countKid--;
+    countKid = 0;
   }
 
   //Se ejecuta esta función al perderse todas las vidas.
@@ -879,7 +880,7 @@ class gameplay extends Phaser.Scene {
     if (level == 1) {
       ball.anims.play("stopBall", true);
     } else if (level !== 1 && stopAnim == "stop2") {
-      timedEvent3.paused = true;
+      timedEvent3.destroy();
       upAnim = "up";
       downAnim = "down";
       rightAnim = "right";
@@ -890,7 +891,7 @@ class gameplay extends Phaser.Scene {
     }
     if (level == 3 && countKid !== 0) {
       stopKid();
-      countKid--;
+      countKid = 0;
     }
 
     this.add.image(400, 300, losttxt);
@@ -937,7 +938,7 @@ class gameplay extends Phaser.Scene {
     if (level == 1) {
       ball.anims.play("stopBall", true);
     } else if (level !== 1 && stopAnim == "stop2") {
-      timedEvent3.paused = true;
+      timedEvent3.destroy();
       upAnim = "up";
       downAnim = "down";
       rightAnim = "right";
@@ -948,7 +949,7 @@ class gameplay extends Phaser.Scene {
     }
     if (level == 3 && countKid !== 0) {
       stopKid();
-      countKid--;
+      countKid = 0;
     }
     this.add.image(400, 300, wintxt);
 
@@ -1040,6 +1041,9 @@ class gameplay extends Phaser.Scene {
     }
     if (score !== 0) {
       score = 0;
+    }
+    if (countKid !== 0) {
+      countKid = 0;
     }
     timedEvent.paused = false;
     if (level !== 1 && stopAnim == "stop2") {
