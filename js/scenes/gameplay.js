@@ -486,21 +486,21 @@ class gameplay extends Phaser.Scene {
     vel2Y2 = -170;
 
     //creacion el evento para la generacion de objetos.
+    delay = 750;
     timedEvent = this.time.addEvent({
-      delay: 750,
+      delay: delay,
       callback: this.objects,
       callbackScope: this,
       loop: true,
     });
 
     //creacion la barra de inmunidad
-    progressBox = this.add.graphics();
     progressBar = this.add.graphics();
-    progressBox.fillStyle(0x222222, 0.8);
-    progressBox.fillRect(16, 16, 206, 25);
+    this.add.image(170, 25, 'bar')
+
 
     progressBar.clear();
-    progressBar.fillStyle(0xffffff, 1);
+    progressBar.fillStyle(0xffff1, 1);
     //creacion de los corazones
     hearts = this.add.group({
       key: "heart",
@@ -616,7 +616,7 @@ class gameplay extends Phaser.Scene {
       cursors = undefined;
       this.gameover();
     }
-    if (score >= 200) {
+    if (score >= 200 && pvp == false) {
       bpause.destroy();
       bmsc.destroy();
       bsfx.destroy();
@@ -639,6 +639,21 @@ class gameplay extends Phaser.Scene {
       cursors = undefined;
       this.lvlfinish();
     }
+    if (score >= 200 && pvp == true) {
+      progressBar.destroy();
+      progressBar = this.add.graphics();
+      progressBar.clear();
+      progressBar.fillStyle(0xffff1, 1);
+      score = 0;
+      delay = delay - 50;
+      timedEvent.destroy();
+      timedEvent = this.time.addEvent({
+        delay: delay,
+        callback: this.objects,
+        callbackScope: this,
+        loop: true,
+      });
+    }
   }
 
   collectSoap(player, soap) {
@@ -648,7 +663,7 @@ class gameplay extends Phaser.Scene {
     iobject = this.add.image(posX, posY, "psoap");
     this.delScore();
     soap.destroy();
-    progressBar.fillRect(19, 19, (score += 10), 19);
+    progressBar.fillRect(84, 16, (score += 10), 19);
     if (sfx == true) {
       track = this.sound.add("goodsfx", { loop: false });
       track.play();
@@ -662,7 +677,7 @@ class gameplay extends Phaser.Scene {
     iobject = this.add.image(posX, posY, "palcohol");
     this.delScore();
     alcohol.destroy();
-    progressBar.fillRect(19, 19, (score += 7.5), 19);
+    progressBar.fillRect(84, 16, (score += 7.5), 19);
     if (sfx == true) {
       track = this.sound.add("goodsfx", { loop: false });
       track.play();
@@ -748,7 +763,7 @@ class gameplay extends Phaser.Scene {
     iobject = this.add.image(posX, posY, "pvaccine");
     this.delScore();
     vaccine.destroy();
-    progressBar.fillRect(19, 19, (score += 40), 19);
+    progressBar.fillRect(84, 16, (score += 40), 19);
     if (sfx == true) {
       track = this.sound.add("vaccinesfx", { loop: false });
       track.play();
@@ -797,7 +812,7 @@ class gameplay extends Phaser.Scene {
     rightAnim = "right2";
     leftAnim = "left2";
     stopAnim = "stop2";
-    progressBar.fillRect(19, 19, (score += 5), 19);
+    progressBar.fillRect(84, 16, (score += 5), 19);
     if (sfx == true) {
       track = this.sound.add("goodsfx", { loop: false });
       track.play();
@@ -827,6 +842,7 @@ class gameplay extends Phaser.Scene {
       callback: () => {
         if (iobject !== undefined) {
           iobject.destroy();
+          iobject = undefined;
         }
       },
       callbackScope: this,
@@ -837,6 +853,7 @@ class gameplay extends Phaser.Scene {
   delScore2() {
     if (iobject !== undefined) {
       iobject.destroy();
+      iobject = undefined;
       timedEvent4.destroy();
     }
   }
@@ -894,10 +911,10 @@ class gameplay extends Phaser.Scene {
       countKid = 0;
     }
 
-    this.add.image(400, 300, losttxt);
+    this.add.image(400, 300, lost);
 
     this.add
-      .image(325, 315, retryb)
+      .image(325, 315, bretry)
       .setInteractive()
       .on("pointerdown", () => {
         this.restart()
@@ -907,7 +924,7 @@ class gameplay extends Phaser.Scene {
       });
 
     this.add
-      .image(475, 315, menub)
+      .image(475, 315, bmenu)
       .setInteractive()
       .on("pointerdown", () => {
         this.exit()
@@ -923,8 +940,8 @@ class gameplay extends Phaser.Scene {
   //Se ejecuta esta función al ganarse un nivel.
   lvlfinish() {
     progressBar.clear();
-    progressBar.fillStyle(0xffffff, 1);
-    progressBar.fillRect(19, 19, 200, 19);
+    progressBar.fillStyle(0xffff1, 1);
+    progressBar.fillRect(84, 16, 200, 19);
     if (music == true){
       this.lvlsupmsc = this.sound.add('lvlsupmsc')
       this.lvlsupmsc.play()
@@ -951,11 +968,11 @@ class gameplay extends Phaser.Scene {
       stopKid();
       countKid = 0;
     }
-    this.add.image(400, 300, wintxt);
+    this.add.image(400, 300, overcome);
 
     if (level < 3) {
       this.add
-        .image(400, 315, continueb)
+        .image(400, 315, bcontinue)
         .setScale(1.2)
         .setInteractive()
         .on("pointerdown", () => {
@@ -965,7 +982,7 @@ class gameplay extends Phaser.Scene {
           }  
         });
       this.add
-        .image(290, 390, retryb)
+        .image(290, 390, bretry)
         .setInteractive()
         .on("pointerdown", () => {
           this.restart()
@@ -975,7 +992,7 @@ class gameplay extends Phaser.Scene {
         });
   
       this.add
-        .image(510, 390, menub)
+        .image(510, 390, bmenu)
         .setInteractive()
         .on("pointerdown", () => {
           this.exit()
@@ -988,7 +1005,7 @@ class gameplay extends Phaser.Scene {
         });
     } else {
       this.add
-        .image(325, 315, retryb)
+        .image(325, 315, bretry)
         .setInteractive()
         .on("pointerdown", () => {
           this.restart()
@@ -998,7 +1015,7 @@ class gameplay extends Phaser.Scene {
         });
   
       this.add
-        .image(475, 315, menub)
+        .image(475, 315, bmenu)
         .setInteractive()
         .on("pointerdown", () => {
           this.exit()
@@ -1053,6 +1070,10 @@ class gameplay extends Phaser.Scene {
       leftAnim = "left";
       stopAnim = "stop";
     }
+    if (pvp == true) {
+      pvp = false;
+      console.log(pvp);
+    }
     track = undefined;
     this.scene.start("main");
   }
@@ -1063,7 +1084,7 @@ class gameplay extends Phaser.Scene {
     this.physics.pause();
     cursors = undefined;
     player.anims.play(stopAnim);
-    if (timedEvent4 !== undefined) {
+    if (timedEvent4 !== undefined && iobject !== undefined) {
       iobject.destroy();
       timedEvent4.destroy();
     }
@@ -1078,10 +1099,10 @@ class gameplay extends Phaser.Scene {
     if (level == 3 && countKid !== 0) {
       stopKid();
     }
-    menu = this.add.image(400, 300, pausescene);
+    menu = this.add.image(400, 300, spause);
 
     button = this.add
-      .image(400, 285, resumeb)
+      .image(400, 285, bresume)
       .setInteractive()
       .on("pointerdown", () => {
         this.outPause()
@@ -1091,7 +1112,7 @@ class gameplay extends Phaser.Scene {
       });
 
     button2 = this.add
-      .image(335, 355, helpb)
+      .image(335, 355, bhelp2)
       .setInteractive()
       .on("pointerdown", () => {
         this.gameHelp()
@@ -1101,7 +1122,7 @@ class gameplay extends Phaser.Scene {
       });
 
     button3 = this.add
-      .image(465, 355, menub)
+      .image(465, 355, bmenu)
       .setInteractive()
       .on("pointerdown", () => {
         if (music == true) {
@@ -1156,11 +1177,12 @@ class gameplay extends Phaser.Scene {
     button2.destroy();
     button3.destroy();
     menu = this.add
-      .image(400, 300, helpscene2)
+      .image(400, 300, shelp2)
       .setInteractive()
       .on(type, () => {
         if (iobject !== undefined) {
           iobject.destroy();
+          iobject = undefined;
         }
       });
 
@@ -1172,7 +1194,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(163, 330, infojabon);
+        iobject = this.add.image(163, 330, isoap);
       });
 
     fvaccine = this.add
@@ -1182,7 +1204,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(298, 328, infovacuna);
+        iobject = this.add.image(298, 328, ivaccine);
       });
 
     falcohol = this.add
@@ -1192,7 +1214,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(168, 413, infoalcohol);
+        iobject = this.add.image(168, 413, ialcohol);
       });
 
     fchinstrap = this.add
@@ -1202,7 +1224,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(295, 416, infobarbijo);
+        iobject = this.add.image(295, 416, ichinstrap);
       });
 
     fmud = this.add
@@ -1212,7 +1234,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(506, 328, infobarro);
+        iobject = this.add.image(506, 328, imud);
       });
 
     fvirus = this.add
@@ -1222,7 +1244,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(648, 328, infovirus);
+        iobject = this.add.image(648, 328, ivirus);
       });
 
     fkid = this.add
@@ -1232,7 +1254,7 @@ class gameplay extends Phaser.Scene {
         if (iobject !== undefined) {
           iobject.destroy();
         }
-        iobject = this.add.image(574, 407, infokid);
+        iobject = this.add.image(574, 407, ikid);
       });
 
     //Creación de botones y seteo de funciones de los mismos.
@@ -1250,7 +1272,7 @@ class gameplay extends Phaser.Scene {
       });
 
     button2 = this.add
-      .image(677, 514, botcontroles)
+      .image(677, 514, bcontrols)
       .setInteractive()
       .on("pointerdown", () => {
         this.gameControls()
@@ -1290,7 +1312,7 @@ class gameplay extends Phaser.Scene {
     button.destroy();
     button2.destroy();
     button3.destroy();
-    menu = this.add.image(400, 300, ctrlsscene2);
+    menu = this.add.image(400, 300, scontrols2);
     button = this.add
       .image(102, 90, "bback")
       .setInteractive()
