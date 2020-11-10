@@ -18,7 +18,7 @@ class selector2 extends Phaser.Scene {
           if (track !== undefined) {
           track.pause();
           }
-          pvp = true;
+          inf = true;
           this.scene.start("gameplay");
         });
     this.add
@@ -34,7 +34,7 @@ class selector2 extends Phaser.Scene {
           if (track !== undefined) {
           track.pause();
           }
-          pvp = true;
+          inf = true;
           this.scene.start("gameplay");
         });
     this.add
@@ -50,7 +50,7 @@ class selector2 extends Phaser.Scene {
           if (track !== undefined) {
           track.pause();
           }
-          pvp = true;
+          inf = true;
           this.scene.start("gameplay");
         });
     this.add

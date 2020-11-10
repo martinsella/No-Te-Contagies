@@ -38,8 +38,7 @@ class main extends Phaser.Scene {
       scontrols2 = 'controls2-es'
       sselector = 'selector-es'
       sselector2 = 'selector2-es'
-      bpvp = 'bpvp-es'
-      ipvp = 'ipvp-es'
+      iinf = 'iinf-es'
     }
     if (language == 'english'){
       bplay = 'bplay-en'
@@ -71,8 +70,7 @@ class main extends Phaser.Scene {
       scontrols2 = 'controls2-en'
       sselector = 'selector-en'
       sselector2 = 'selector2-en'
-      bpvp = 'bpvp-en'
-      ipvp = 'ipvp-en'
+      iinf = 'iinf-en'
     }
     if(language == 'portuguese'){
       bplay = 'bplay-pt'
@@ -104,8 +102,7 @@ class main extends Phaser.Scene {
       scontrols2 = 'controls2-pt'
       sselector = 'selector-pt'
       sselector2 = 'selector2-pt'
-      bpvp = 'bpvp-es'
-      ipvp = 'ipvp-pt'
+      iinf = 'iinf-pt'
     }
     if (track == undefined && music == true) {
       track = this.sound.add("mainmsc", { loop: true });

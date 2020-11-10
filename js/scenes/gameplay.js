@@ -25,6 +25,7 @@ class gameplay extends Phaser.Scene {
   }
 
   create() {
+    console.log(i);
     //Creación de: background, personaje y pelota (si es necesario).
     if (level == 1) {
       this.add.image(400, 300, "background");
@@ -459,19 +460,7 @@ class gameplay extends Phaser.Scene {
             (downRight = false), (b8.alpha += 1);
           }));
     else {
-      (cursors = this.input.keyboard.createCursorKeys()),
-        (FKey = this.input.keyboard.addKey("F"));
-      FKey.on(
-        "down",
-        () => {
-          if (this.scale.isFullscreen) {
-            this.scale.stopFullscreen();
-          } else {
-            this.scale.startFullscreen();
-          }
-        },
-        this
-      );
+      (cursors = this.input.keyboard.createCursorKeys(), this);
     }
 
     //seteo de velocidad de movimiento del personaje y contador de respawn de vacunas.
@@ -496,7 +485,7 @@ class gameplay extends Phaser.Scene {
 
     //creacion la barra de inmunidad
     progressBar = this.add.graphics();
-    this.add.image(170, 25, 'bar')
+    bar = this.add.image(165, 25, 'bar');
 
 
     progressBar.clear();
@@ -616,7 +605,7 @@ class gameplay extends Phaser.Scene {
       cursors = undefined;
       this.gameover();
     }
-    if (score >= 200 && pvp == false) {
+    if (score >= 200 && inf == false) {
       bpause.destroy();
       bmsc.destroy();
       bsfx.destroy();
@@ -632,20 +621,22 @@ class gameplay extends Phaser.Scene {
       }
       if (levOver <= 2 && i !== 1) {
         levOver++;
-        i = 1;
       }
       lives = 3;
       score = 0;
       cursors = undefined;
       this.lvlfinish();
     }
-    if (score >= 200 && pvp == true) {
+    if (score >= 200 && inf == true) {
       progressBar.destroy();
+      bar.destroy();
       progressBar = this.add.graphics();
+      bar = this.add.image(165, 25, 'bar')
       progressBar.clear();
       progressBar.fillStyle(0xffff1, 1);
       score = 0;
       delay = delay - 50;
+      countvac2++;
       timedEvent.destroy();
       timedEvent = this.time.addEvent({
         delay: delay,
@@ -663,7 +654,7 @@ class gameplay extends Phaser.Scene {
     iobject = this.add.image(posX, posY, "psoap");
     this.delScore();
     soap.destroy();
-    progressBar.fillRect(84, 16, (score += 10), 19);
+    progressBar.fillRect(56.5, 16, (score += 10), 19);
     if (sfx == true) {
       track = this.sound.add("goodsfx", { loop: false });
       track.play();
@@ -677,7 +668,7 @@ class gameplay extends Phaser.Scene {
     iobject = this.add.image(posX, posY, "palcohol");
     this.delScore();
     alcohol.destroy();
-    progressBar.fillRect(84, 16, (score += 7.5), 19);
+    progressBar.fillRect(56.5, 16, (score += 7.5), 19);
     if (sfx == true) {
       track = this.sound.add("goodsfx", { loop: false });
       track.play();
@@ -763,7 +754,7 @@ class gameplay extends Phaser.Scene {
     iobject = this.add.image(posX, posY, "pvaccine");
     this.delScore();
     vaccine.destroy();
-    progressBar.fillRect(84, 16, (score += 40), 19);
+    progressBar.fillRect(56.5, 16, (score += 40), 19);
     if (sfx == true) {
       track = this.sound.add("vaccinesfx", { loop: false });
       track.play();
@@ -812,7 +803,7 @@ class gameplay extends Phaser.Scene {
     rightAnim = "right2";
     leftAnim = "left2";
     stopAnim = "stop2";
-    progressBar.fillRect(84, 16, (score += 5), 19);
+    progressBar.fillRect(56.5, 16, (score += 5), 19);
     if (sfx == true) {
       track = this.sound.add("goodsfx", { loop: false });
       track.play();
@@ -890,8 +881,9 @@ class gameplay extends Phaser.Scene {
     player.anims.play(stopAnim);
 
     if( music == true ){
-      this.lvlfmsc = this.sound.add('lvllostmsc')
-      this.lvlfmsc.play()
+      lvlfmsc = this.sound.add('lvllostmsc')
+      lvlfmsc.play()
+      lvlfmsc = undefined;
     }
 
     if (level == 1) {
@@ -913,6 +905,13 @@ class gameplay extends Phaser.Scene {
 
     this.add.image(400, 300, lost);
 
+    if (inf == true) {
+      this.add.text(353, 250, "Puntaje: " + countvac2, {
+        fill: "#e5d6ff",
+        font: "20px Franklin Gothic Demi",
+      });
+    }
+
     this.add
       .image(325, 315, bretry)
       .setInteractive()
@@ -920,7 +919,13 @@ class gameplay extends Phaser.Scene {
         this.restart()
         if (sfx == true) {
           bnextsfx.play();
-        }  
+        }
+        if (lvlfmsc !== undefined) {
+          if (lvlfmsc.isPlaying = true) {
+            lvlfmsc.destroy();
+            lvlfmsc = undefined;
+          }
+        }
       });
 
     this.add
@@ -933,7 +938,13 @@ class gameplay extends Phaser.Scene {
         } 
         if (sfx == true) {
           bnextsfx.play();
-        }  
+        }
+        if (lvlfmsc !== undefined) {
+          if (lvlfmsc.isPlaying = true) {
+            lvlfmsc.destroy();
+            lvlfmsc = undefined;
+          }
+        }
       });
   }
 
@@ -941,11 +952,12 @@ class gameplay extends Phaser.Scene {
   lvlfinish() {
     progressBar.clear();
     progressBar.fillStyle(0xffff1, 1);
-    progressBar.fillRect(84, 16, 200, 19);
+    progressBar.fillRect(56.5, 16, 200, 19);
     if (music == true){
-      this.lvlsupmsc = this.sound.add('lvlsupmsc')
-      this.lvlsupmsc.play()
+      lvlsupmsc = this.sound.add('lvlsupmsc')
+      lvlsupmsc.play();
     }
+    this.add.image(400, 300, overcome);
     player.destroy()
     player = new Player({ scene: this, x: 380, y: 470, texture: "player" });
     this.physics.pause();
@@ -968,7 +980,6 @@ class gameplay extends Phaser.Scene {
       stopKid();
       countKid = 0;
     }
-    this.add.image(400, 300, overcome);
 
     if (level < 3) {
       this.add
@@ -980,6 +991,12 @@ class gameplay extends Phaser.Scene {
           if (sfx == true) {
             bnextsfx.play();
           }  
+          if (lvlsupmsc !== undefined) {
+            if (lvlsupmsc.isPlaying = true) {
+              lvlsupmsc.destroy();
+              lvlsupmsc = undefined;
+            }
+          }
         });
       this.add
         .image(290, 390, bretry)
@@ -988,7 +1005,13 @@ class gameplay extends Phaser.Scene {
           this.restart()
           if (sfx == true) {
             bnextsfx.play();
-          }  
+          }
+          if (lvlsupmsc !== undefined) {
+            if (lvlsupmsc.isPlaying = true) {
+              lvlsupmsc.destroy();
+              lvlsupmsc = undefined;
+            }
+          }
         });
   
       this.add
@@ -1002,6 +1025,12 @@ class gameplay extends Phaser.Scene {
           if (sfx == true) {
             bbacksfx.play();
           }
+          if (lvlsupmsc !== undefined) {
+            if (lvlsupmsc.isPlaying = true) {
+              lvlsupmsc.destroy();
+              lvlsupmsc = undefined;
+            }
+          }
         });
     } else {
       this.add
@@ -1011,7 +1040,13 @@ class gameplay extends Phaser.Scene {
           this.restart()
           if (sfx == true) {
             bnextsfx.play();
-          }  
+          }
+          if (lvlsupmsc !== undefined) {
+            if (lvlsupmsc.isPlaying = true) {
+              lvlsupmsc.destroy();
+              lvlsupmsc = undefined;
+            }
+          }
         });
   
       this.add
@@ -1024,6 +1059,12 @@ class gameplay extends Phaser.Scene {
           }
           if (sfx == true) {
             bbacksfx.play();
+          }
+          if (lvlsupmsc !== undefined) {
+            if (lvlsupmsc.isPlaying = true) {
+              lvlsupmsc.destroy();
+              lvlsupmsc = undefined;
+            }
           }
         });
     }
@@ -1039,16 +1080,20 @@ class gameplay extends Phaser.Scene {
     }
     if (levOver <= 2 && i !== 0) {
       i = 0;
+      console.log(i);
     }
     this.scene.start("gameplay");
   }
 
   restart() {
-    this.scene.start("gameplay");
     timedEvent.paused = false;
     if (level !== 1 && stopAnim == "stop2") {
       stopAnim = "stop";
     }
+    if (inf == true && countvac2 !== 0) {
+      countvac2 = 0;
+    }
+    this.scene.start("gameplay");
   }
 
   //Si se elige "salir al menu principal" se ejeucta esta función.
@@ -1070,9 +1115,15 @@ class gameplay extends Phaser.Scene {
       leftAnim = "left";
       stopAnim = "stop";
     }
-    if (pvp == true) {
-      pvp = false;
-      console.log(pvp);
+    if (levOver < 3 && i == 0) {
+      i = 1;
+      console.log(i);
+    }
+    if (inf == true && countvac2 !== 0) {
+      countvac2 = 0;
+    }
+    if (inf == true) {
+      inf = false;
     }
     track = undefined;
     this.scene.start("main");

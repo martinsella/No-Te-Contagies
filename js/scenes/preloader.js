@@ -114,7 +114,7 @@ class preloader extends Phaser.Scene {
     this.load.image("besc2", "assets/images/undefined/buttons/besc2.png");
     this.load.image("besc3", "assets/images/undefined/buttons/besc3.png");
     this.load.image("blocked", "assets/images/undefined/buttons/blocked.png");
-    this.load.image("bpvplocked", "assets/images/undefined/buttons/bpvplocked.png");
+    this.load.image("binflocked", "assets/images/undefined/buttons/binflocked.png");
     this.load.image("bspanish", "assets/images/undefined/buttons/bspanish.png");
     this.load.image("benglish", "assets/images/undefined/buttons/benglish.png");
     this.load.image("bportuguese", "assets/images/undefined/buttons/bportuguese.png");
@@ -132,6 +132,7 @@ class preloader extends Phaser.Scene {
     this.load.image("bsfxon", "assets/images/undefined/buttons/bsfxon.png");
     this.load.image("bsfxoff", "assets/images/undefined/buttons/bsfxoff.png");
     this.load.image("bback", "assets/images/undefined/buttons/bback.png");
+    this.load.image("binf", "assets/images/undefined/buttons/binf.png");
 
     //carga de escenas en español.
     this.load.image("help-es", "assets/images/spanish/menus/help.png");
@@ -153,7 +154,6 @@ class preloader extends Phaser.Scene {
     this.load.image("bhelp2-es", "assets/images/spanish/buttons/bhelp2.png");
     this.load.image("bresume-es", "assets/images/spanish/buttons/bresume.png");
     this.load.image("bcontrols-es", "assets/images/spanish/buttons/bcontrols.png");
-    this.load.image("bpvp-es", "assets/images/spanish/buttons/bpvp.png");
     this.load.image("bretry-es", "assets/images/spanish/buttons/bretry.png");
     this.load.image("bexit-es", "assets/images/spanish/buttons/bexit.png");
     this.load.image("bmenu-es", "assets/images/spanish/buttons/bmenu.png");
@@ -165,7 +165,7 @@ class preloader extends Phaser.Scene {
     this.load.image("ivaccine-es", "assets/images/spanish/buttons/ivaccine.png");
     this.load.image("ivirus-es", "assets/images/spanish/buttons/ivirus.png");
     this.load.image("ikid-es", "assets/images/spanish/buttons/ikid.png");
-    this.load.image("ipvp-es", "assets/images/spanish/buttons/ipvp.png");
+    this.load.image("iinf-es", "assets/images/spanish/buttons/iinf.png");
 
     //carga de escenas en inglés.
     this.load.image('help-en', 'assets/images/english/menus/help.png');
@@ -198,8 +198,7 @@ class preloader extends Phaser.Scene {
     this.load.image('bcredits-en', 'assets/images/english/buttons/bcredits.png');
     this.load.image('bexit-en', 'assets/images/english/buttons/bexit.png');
     this.load.image('bplay-en', 'assets/images/english/buttons/bplay.png');
-    this.load.image('bpvp-en', 'assets/images/english/buttons/bpvp.png');
-    this.load.image('ipvp-en', 'assets/images/english/buttons/ipvp.png');
+    this.load.image('iinf-en', 'assets/images/english/buttons/iinf.png');
 
     //carga de assets en portugues
     this.load.image('help-pt', 'assets/images/portuguese/menus/help.png');
@@ -230,7 +229,7 @@ class preloader extends Phaser.Scene {
     this.load.image('bcredits-pt', 'assets/images/portuguese/buttons/bcredits.png');
     this.load.image('bexit-pt', 'assets/images/portuguese/buttons/bexit.png');
     this.load.image('bplay-pt', 'assets/images/portuguese/buttons/bplay.png');
-    this.load.image('ipvp-pt', 'assets/images/portuguese/buttons/ipvp.png');
+    this.load.image('iinf-pt', 'assets/images/portuguese/buttons/iinf.png');
 
     //carga de audio.
     this.load.audio("mainmsc", "assets/music/main.mp3");
