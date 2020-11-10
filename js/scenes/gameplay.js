@@ -25,7 +25,6 @@ class gameplay extends Phaser.Scene {
   }
 
   create() {
-    console.log(i);
     //Creación de: background, personaje y pelota (si es necesario).
     if (level == 1) {
       this.add.image(400, 300, "background");
@@ -1080,7 +1079,6 @@ class gameplay extends Phaser.Scene {
     }
     if (levOver <= 2 && i !== 0) {
       i = 0;
-      console.log(i);
     }
     this.scene.start("gameplay");
   }
@@ -1117,7 +1115,6 @@ class gameplay extends Phaser.Scene {
     }
     if (levOver < 3 && i == 0) {
       i = 1;
-      console.log(i);
     }
     if (inf == true && countvac2 !== 0) {
       countvac2 = 0;
