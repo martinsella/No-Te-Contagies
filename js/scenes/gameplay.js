@@ -965,7 +965,7 @@ class gameplay extends Phaser.Scene {
     player = new Player({ scene: this, x: 380, y: 470, texture: "player" });
     this.physics.pause();
     timedEvent.paused = true;
-    player.anims.play("victory").setScale(0.43);
+    player.anims.play("victory").setScale(0.50);
     
     if (level == 2) {
       ball.anims.play("stopBall", true);
