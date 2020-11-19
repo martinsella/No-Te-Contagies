@@ -1179,6 +1179,9 @@ class gameplay extends Phaser.Scene {
     if (level !== 1 && stopAnim == "stop2") {
       stopAnim = "stop";
     }
+    if (levOver < 3 && i == 0) {
+      i = 1;
+    }
     if (inf == true && countvac2 !== 0) {
       countvac2 = 0;
     }
