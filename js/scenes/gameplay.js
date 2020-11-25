@@ -251,9 +251,9 @@ class gameplay extends Phaser.Scene {
       this.physics.add.collider(paper, bench);
     }
     if (inf == true) {
-      countvac3 = this.add.text(320, 12, "x" + countvac2, {
-        fill: "#e5d6ff",
-        font: "20px Franklin Gothic Demi",
+      countvac3 = this.add.text(321, 6, "x" + countvac2, {
+        fill: "#8ffff1",
+        font: "30px Franklin Gothic Demi",
       });
     }
 
@@ -1005,17 +1005,17 @@ class gameplay extends Phaser.Scene {
     if (inf == true) {
       if (language == 'english') {
         this.add.text(353, 260, text + countvac2, {
-          fill: "#e5d6ff",
+          fill: "#8ffff1",
           font: "20px Franklin Gothic Demi",
         });
       } else if (language == 'portuguese') {
         this.add.text(336, 250, text + countvac2, {
-          fill: "#e5d6ff",
+          fill: "#8ffff1",
           font: "20px Franklin Gothic Demi",
         });
       } else {
         this.add.text(343, 250, text + countvac2, {
-          fill: "#e5d6ff",
+          fill: "#8ffff1",
           font: "20px Franklin Gothic Demi",
         });
       }
